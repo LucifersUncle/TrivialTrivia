@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
-public class MainActivity extends AppCompatActivity {
+public class ScoreActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_score);
     }
 }

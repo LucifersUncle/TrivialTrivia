@@ -10,7 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrivialTrivia">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.ScoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.QuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.LobbyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.InviteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity2"
+            android:exported="false"
+            android:label="@string/title_activity_login2" />
+        <activity
+            android:name=".Activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
