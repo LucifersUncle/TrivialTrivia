@@ -15,5 +15,7 @@
     <string name="btn_startGame">Start Game</string>
     <string name="txt_lobby">Lobby</string>
     <string name="txt_points">Points:</string>
+    <string name="txt_finalsScores">The final scores are</string>
+    <string name="btn_newGame">New Game</string>
 
 </resources>

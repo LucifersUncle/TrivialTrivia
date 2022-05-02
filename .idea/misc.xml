@@ -7,7 +7,10 @@
         <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/drawable/ic_launcher_background.xml" value="0.136" />
         <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_active_game.xml" value="0.22" />
         <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_lobby.xml" value="0.1796875" />
-        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/list_player.xml" value="0.1796875" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_results.xml" value="0.22" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_score.xml" value="0.1796875" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/list_player.xml" value="0.1" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/list_results.xml" value="0.22" />
       </map>
     </option>
   </component>
