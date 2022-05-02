@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">TrivialTrivia</string>
+    <string name="btnLogin">Login</string>
+    <string name="txtLogin">LOGIN</string>
+    <string name="btn_startGame">Start Game</string>
+    <string name="txt_lobby">Lobby</string>
+    <string name="txt_points">Points:</string>
+    <string name="txt_finalsScores">The final scores are</string>
+    <string name="btn_newGame">New Game</string>
+
     <string name="title_activity_login2">LoginActivity2</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -9,13 +17,17 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="btnLogin">Login</string>
+    <string name="buttonLogin">Login</string>
     <string name="btnSignUp">Sign Up</string>
-    <string name="txtLogin">LOGIN</string>
-    <string name="btn_startGame">Start Game</string>
-    <string name="txt_lobby">Lobby</string>
-    <string name="txt_points">Points:</string>
-    <string name="txt_finalsScores">The final scores are</string>
-    <string name="btn_newGame">New Game</string>
+    <string name="textLoginHeader">LOGIN</string>
+    <string name="textRegister">Register</string>
+    <string name="textForgotPassword">Forgot Password?</string>
+    <string name="textAppName">Trivial Trivia</string>
+    <string name="editTextUsername">Username</string>
+    <string name="buttonRegister">Register User</string>
+    <string name="textWelcomeHeaderProfile">Welcome</string>
+    <string name="buttonLogOut">Log Out</string>
+    <string name="textUserGreeting">Test</string>
+    <string name="buttonResetPassword">Reset Password</string>
 
 </resources>

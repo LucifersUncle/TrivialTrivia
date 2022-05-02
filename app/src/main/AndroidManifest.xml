@@ -10,11 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrivialTrivia">
         <activity
+            android:name=".Activities.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ResultsActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.LoginActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activities.ScoreActivity"
             android:exported="false" />
@@ -27,11 +42,6 @@
         <activity
             android:name=".Activities.LobbyActivity"
             android:exported="false" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         <activity
             android:name=".Activities.InviteActivity"
             android:exported="false" />
