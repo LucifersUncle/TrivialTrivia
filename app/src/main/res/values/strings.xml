@@ -12,4 +12,8 @@
     <string name="btnLogin">Login</string>
     <string name="btnSignUp">Sign Up</string>
     <string name="txtLogin">LOGIN</string>
+    <string name="btn_startGame">Start Game</string>
+    <string name="txt_lobby">Lobby</string>
+    <string name="txt_points">Points:</string>
+
 </resources>

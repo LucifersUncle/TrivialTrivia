@@ -3,11 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/border.xml" value="0.4715" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.569140625" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w936dp/activity_login.xml" value="0.4125" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_login.xml" value="0.55" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_main.xml" value="0.55" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/drawable/border.xml" value="0.136" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/drawable/ic_launcher_background.xml" value="0.136" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_active_game.xml" value="0.22" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/activity_lobby.xml" value="0.1796875" />
+        <entry key="..\:/MAD_projects/App-project/TrivialTrivia/app/src/main/res/layout/list_player.xml" value="0.1796875" />
       </map>
     </option>
   </component>
