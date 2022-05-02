@@ -2,10 +2,22 @@ package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,12 +27,21 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.w3c.dom.Text;
+
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
 //https://firebase.google.com/docs/auth/android/start
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private TextView register, forgotPassword;
+    private EditText editTextEmailAddress, editTextPassword;
+    private Button login;
+
     private FirebaseAuth mAuth;
-    //private String email, password;
+
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +50,30 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth instance
         mAuth = FirebaseAuth.getInstance();
+
+        //region Widgets
+
+        //region Buttons
+        register = (TextView) findViewById(R.id.textRegister);
+        register.setOnClickListener(this);
+
+        forgotPassword = (TextView) findViewById(R.id.textForgotPassword);
+        forgotPassword.setOnClickListener(this);
+
+        login = (Button) findViewById(R.id.buttonLogin);
+        login.setOnClickListener(this);
+        //endregion
+
+        //region EditTexts
+        editTextEmailAddress = (EditText) findViewById(R.id.editTextEmailLogin);
+        editTextPassword = (EditText) findViewById(R.id.editTextPasswordLogin);
+        //endregion
+
+        //region ProgressBar
+        progressBar = (ProgressBar) findViewById(R.id.progressBarLogin);
+        //endregion
+
+        //endregion
     }
 
     @Override
@@ -40,52 +85,89 @@ public class LoginActivity extends AppCompatActivity {
             //reload();
             Toast.makeText(this, "currentUser is not null - reload()", Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
 
-    //region Sign Up
-    private void createAccount(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in succes, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user
-                            Log.w(TAG, "createUserWithEmail:failure ",task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.textRegister:
+                startActivity(new Intent(this, RegisterActivity.class));
+                break;
+
+            case R.id.buttonLogin:
+                signIn();
+                break;
+
+            case R.id.textForgotPassword:
+                startActivity(new Intent(this, ForgotPasswordActivity.class));
+                break;
+        }
+    }
+
+    private void signIn() {
+        String email = editTextEmailAddress.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+
+        //region LoginForm Validators
+
+        if (email.isEmpty()) {
+            editTextEmailAddress.setError("Email is required!");
+            editTextEmailAddress.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmailAddress.setError("Please enter a valid email!");
+            editTextEmailAddress.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            editTextPassword.setError("Password is required!");
+            editTextPassword.requestFocus();
+            return;
+        }
+
+        if (password.length() < 6) {
+            editTextPassword.setError("Min password length is 6 characters!");
+            editTextPassword.requestFocus();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); //current logged in used
+
+                    //checks whether a user is verified by email
+                    if (user.isEmailVerified()) {
+                        //redirect to user profile
+                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    } else {
+                        user.sendEmailVerification();
+                        Toast.makeText(LoginActivity.this, "Check your email to verify your account!", Toast.LENGTH_LONG);
                     }
-                });
-    }
-    //endregion
 
-    //region Sign In
-    private void signIn(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fauls, display a message to the user
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-                    }
-                });
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Failed to login! Please check your credentials!", Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+        //endregion
     }
-    //endregion
+
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                //Handle the result here
+            }
+        }
+    });
 }

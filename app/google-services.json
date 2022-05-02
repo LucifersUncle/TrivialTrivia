@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "509540388533",
+    "project_id": "trivialtrivia-group20",
+    "storage_bucket": "trivialtrivia-group20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509540388533:android:8079bdca4ab8a7c0d2b8fc",
+        "android_client_info": {
+          "package_name": "dk.au.mad22spring.appproject.trivialtrivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509540388533-fdl9hi0i9d3443il78vojbgtr7af4hrf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI6TDEgsvNZpcO60b_ciUi2VSJh0EJ1lE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509540388533-fdl9hi0i9d3443il78vojbgtr7af4hrf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
