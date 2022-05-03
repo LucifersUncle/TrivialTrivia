@@ -4,6 +4,9 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Repository;
 
@@ -14,4 +17,7 @@ public class LobbyViewModel extends AndroidViewModel {
         super(application);
         //repository = Repository.getInstance(application);
     }
+
+
+
 }
