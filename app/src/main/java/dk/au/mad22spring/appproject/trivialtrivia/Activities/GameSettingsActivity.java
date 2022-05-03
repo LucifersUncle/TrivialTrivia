@@ -1,18 +1,26 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
-
+import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewModel;
 
 
 public class GameSettingsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -20,9 +28,12 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
     NumberPicker roundsPicker, timePicker;
     Button buttonHostGame;
     Spinner spinnerCategory, spinnerDifficulty;
+    EditText gameName;
 
-    //Set to Any difficulty/category
     String difficultySelected="", categorySelected="";
+
+    private GameSettingsViewModel vm;
+    private int roundsPicked, timePickedPerRound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,26 +62,52 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         spinnerDifficulty.setAdapter(difficultyAdapter);
         //endregion
 
-        roundsPicker = (NumberPicker) findViewById(R.id.numberOfRoundsPicker);
-        roundsPicker.setMinValue(0);
-        roundsPicker.setMaxValue(10);
 
+
+        //region Rounds Picker
+        roundsPicker = (NumberPicker) findViewById(R.id.numberOfRoundsPicker);
+        roundsPicked = 1;
+        roundsPicker.setMaxValue(10);
+        roundsPicker.setMinValue(1);
+        roundsPicker.setValue(1);
+        roundsPicker.setWrapSelectorWheel(false);
+        //endregion
+
+        //region Time Picker
         timePicker = (NumberPicker) findViewById(R.id.numberOfSecondsPicker);
+        timePickedPerRound = 10;
         timePicker.setMinValue(1);
-        timePicker.setMaxValue(60);
+        timePicker.setMaxValue(12);
+        timePicker.setValue(1);
+        String[] seconds = {"5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"};
+        timePicker.setDisplayedValues(seconds);
+        timePicker.setWrapSelectorWheel(false);
+        //endregion
 
         buttonHostGame = (Button) findViewById(R.id.buttonHostGame);
-        buttonHostGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        buttonHostGame.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buttonHostGame:
+                String game = gameName.getText().toString();
 
+                if (game.isEmpty()) {
+                    gameName.setError("Game name cannot be empty!");
+                    gameName.requestFocus();
+                } else {
+                    String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, "test");
+
+                    Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+                    intent.putExtra(Constants.PLAYER_OBJ, "host");
+                    intent.putExtra(Constants.GAME_OBJ, game);
+                    intent.putExtra(Constants.DOC_OBJ, documentName);
+                    launcher.launch(intent);
+                }
+                break;
+        }
     }
 
 
@@ -147,4 +184,15 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == RESULT_CANCELED) {
+                    finish();
+                }
+            }
+        }
+    });
 }
