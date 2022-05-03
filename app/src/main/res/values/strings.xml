@@ -38,5 +38,7 @@
     <string name="editTextGameName" />
     <string name="dropDownDifficulty"></string>
     <string name="dropDownCategory"></string>
+    <string name="txtAvailableGames">Available Games</string>
+    <string name="buttonBack">Back</string>
 
 </resources>

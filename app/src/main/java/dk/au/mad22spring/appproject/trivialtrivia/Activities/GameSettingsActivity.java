@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
@@ -40,6 +42,8 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
 
+        vm = new ViewModelProvider(this).get(GameSettingsViewModel.class);
+
         //region Category Dropdown menu
         //Set up drop down with ArrayAdapter for Category
         spinnerCategory = (Spinner) findViewById(R.id.dropDownCategory);
@@ -62,7 +66,9 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         spinnerDifficulty.setAdapter(difficultyAdapter);
         //endregion
 
-
+        //region Edit Texts
+        gameName = findViewById(R.id.editTextGameName);
+        //endregion
 
         //region Rounds Picker
         roundsPicker = (NumberPicker) findViewById(R.id.numberOfRoundsPicker);
@@ -71,6 +77,12 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         roundsPicker.setMinValue(1);
         roundsPicker.setValue(1);
         roundsPicker.setWrapSelectorWheel(false);
+        roundsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                roundsPicked = i1;
+            }
+        });
         //endregion
 
         //region Time Picker
@@ -82,10 +94,18 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         String[] seconds = {"5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"};
         timePicker.setDisplayedValues(seconds);
         timePicker.setWrapSelectorWheel(false);
+        timePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                timePickedPerRound = (i1 != 0 ? i1 : i)*5;
+            }
+        });
         //endregion
 
+        //region Buttons
         buttonHostGame = (Button) findViewById(R.id.buttonHostGame);
         buttonHostGame.setOnClickListener(this);
+        //endregion
     }
 
     @Override
@@ -189,8 +209,10 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
+                Toast.makeText(GameSettingsActivity.this, "YOU WIN", Toast.LENGTH_SHORT).show();
                 if (result.getResultCode() == RESULT_CANCELED) {
-                    finish();
+                    //finish();
+                    Toast.makeText(GameSettingsActivity.this, "YOU SUCK", Toast.LENGTH_LONG).show();
                 }
             }
         }

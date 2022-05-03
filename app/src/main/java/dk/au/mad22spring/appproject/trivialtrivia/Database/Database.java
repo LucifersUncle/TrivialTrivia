@@ -54,7 +54,7 @@ public class Database {
     }
 
     public String addGame(String gameName, int timePerRound, int numberOfRounds, String playerName) {
-        mDatabase = FirebaseDatabase.getInstance().getReference("Lobby");
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobby");
 
         String documentName = UUID.randomUUID().toString();
 
