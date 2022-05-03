@@ -2,11 +2,17 @@ package dk.au.mad22spring.appproject.trivialtrivia.Database;
 
 import android.mtp.MtpConstants;
 import android.provider.ContactsContract;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +69,35 @@ public class Database {
         mDatabase.child(documentName).setValue(game);
 
         return documentName;
+    }
+
+    public LiveData<List<Game>> getGames(){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobby");
+
+        ValueEventListener gameListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> lobbies = snapshot.getChildren();
+
+                List<Game> lobbiesList = new ArrayList<Game>();
+
+                for(DataSnapshot lobby : lobbies){
+                    String gameName = lobby.child("gameName").getValue().toString();
+                    String documentName = UUID.randomUUID().toString();
+
+                    Game game = new Game(gameName, 10, 10, "guffestav", documentName, true, false);
+                    lobbiesList.add(game);
+                }
+
+                listOfGames.setValue(lobbiesList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: Something went wrong here :(");
+            }
+        };
+        mDatabase.addValueEventListener(gameListener);
+        return listOfGames;
     }
 }

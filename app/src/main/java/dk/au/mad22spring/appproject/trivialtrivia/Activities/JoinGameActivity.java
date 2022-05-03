@@ -1,19 +1,32 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+
 import dk.au.mad22spring.appproject.trivialtrivia.Adapters.JoinGameAdapter;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
+import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.JoinGameViewModel;
+import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 
 public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapter.IJoinGameItemClickedListener {
 
     //widgets
     private RecyclerView rcvList;
     private JoinGameAdapter adapter;
+
+    private JoinGameViewModel joinGameViewModel;
+    private List<Game> lobbies;
+
 
 
     @Override
@@ -26,6 +39,15 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
 
+
+        joinGameViewModel = new ViewModelProvider(this).get(JoinGameViewModel.class);
+        joinGameViewModel.getGames().observe(this, new Observer<List<Game>>() {
+            @Override
+            public void onChanged(List<Game> games) {
+                lobbies = games;
+                adapter.updatePlayerList(lobbies);
+            }
+        });
 
     }
 

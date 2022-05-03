@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
@@ -21,14 +22,14 @@ public class JoinGameAdapter extends RecyclerView.Adapter<JoinGameAdapter.JoinGa
 }
     private IJoinGameItemClickedListener listener;
 
-    private ArrayList<Game> gameList;
+    private List<Game> gameList;
 
     public JoinGameAdapter(IJoinGameItemClickedListener listener){
         this.listener=listener;
-        this.gameList= new ArrayList<Game>();
+        this.gameList = new ArrayList<Game>();
     }
 
-    public void updatePlayerList(ArrayList<Game> list){
+    public void updatePlayerList(List<Game> list){
         gameList = list;
         notifyDataSetChanged();
     }
