@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapter.IJoinGameItemClickedListener {
 
     //widgets
+    private Button buttonBack;
     private RecyclerView rcvList;
     private JoinGameAdapter adapter;
 
@@ -49,6 +52,13 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
             }
         });
 
+        buttonBack = findViewById(R.id.buttonAvailableGamesBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
