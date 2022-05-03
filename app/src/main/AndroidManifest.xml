@@ -10,10 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TrivialTrivia">
         <activity
+            android:name=".Activities.JoinGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.GameSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.ProfileActivity"
+            android:name=".Activities.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.RegisterActivity"
@@ -37,16 +43,10 @@
             android:name=".Activities.ActiveGameActivity"
             android:exported="false" />
         <activity
-            android:name=".Activities.QuizActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.LobbyActivity"
             android:exported="false" />
         <activity
             android:name=".Activities.InviteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.HomeActivity"
             android:exported="false" />
     </application>
 

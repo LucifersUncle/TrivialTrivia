@@ -1,7 +1,7 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Models;
 
 public class User {
-    public String username, email;
+    public String username, email, userReference;
 
     public User() {
         //empty constructor

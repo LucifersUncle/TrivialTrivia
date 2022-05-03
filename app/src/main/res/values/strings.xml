@@ -29,5 +29,14 @@
     <string name="buttonLogOut">Log Out</string>
     <string name="textUserGreeting">Test</string>
     <string name="buttonResetPassword">Reset Password</string>
+    <string name="buttonCreateGame">Create</string>
+    <string name="buttonJoinGame">Join</string>
+    <string name="textGameSettingsHeader">Game Settings</string>
+    <string name="textNumberOfRounds">Rounds:</string>
+    <string name="textNumberOfSeconds">Time in Seconds:</string>
+    <string name="buttonHostGame">Host Game</string>
+    <string name="editTextGameName" />
+    <string name="dropDownDifficulty">Difficulty</string>
+    <string name="dropDownCategory">Category</string>
 
 </resources>

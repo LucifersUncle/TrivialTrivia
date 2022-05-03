@@ -6,14 +6,21 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/border.xml" value="0.4715" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.569140625" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w936dp/activity_login.xml" value="0.4125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_active_game.xml" value="0.4395833333333333" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_forgot_password.xml" value="0.3645833333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_game_settings.xml" value="0.33" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_home.xml" value="0.3109375" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_invite.xml" value="0.3109375" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_join_game.xml" value="0.4395833333333333" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_lobby.xml" value="0.3109375" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_main.xml" value="0.55" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_profile.xml" value="0.4395833333333333" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_register.xml" value="0.3645833333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_results.xml" value="0.4395833333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_score.xml" value="0.4395833333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/list_player.xml" value="0.4395833333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/list_results.xml" value="0.4395833333333333" />
       </map>
     </option>
   </component>
