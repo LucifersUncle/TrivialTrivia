@@ -21,6 +21,7 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
     Button buttonHostGame;
     Spinner spinnerCategory, spinnerDifficulty;
 
+    //Set to Any difficulty/category
     String difficultySelected="", categorySelected="";
 
     @Override
@@ -49,8 +50,6 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
         difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDifficulty.setAdapter(difficultyAdapter);
         //endregion
-
-
 
         roundsPicker = (NumberPicker) findViewById(R.id.numberOfRoundsPicker);
         roundsPicker.setMinValue(0);

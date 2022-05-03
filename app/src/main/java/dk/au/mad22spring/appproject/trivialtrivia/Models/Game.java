@@ -1,6 +1,7 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Models;
 
 public class Game {
+
     private String gameName;
 
     private int timePerRound, numberOfRounds, currentRound;
@@ -19,5 +20,10 @@ public class Game {
         this.currentRound = 1;
         this.gameIsActive = gameIsActive;
         this.gameIsStarted = gameIsStarted;
+    }
+
+
+    public String getGameName() {
+        return gameName;
     }
 }

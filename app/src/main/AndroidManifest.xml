@@ -37,9 +37,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ScoreActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.ActiveGameActivity"
             android:exported="false" />
         <activity
