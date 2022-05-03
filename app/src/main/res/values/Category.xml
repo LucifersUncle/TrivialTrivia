@@ -11,6 +11,7 @@
         <item>Entertainment: Video Games</item>
         <item>Entertainment: Board Games</item>
         <item>Science and Nature</item>
+        <item>Science: Computers</item>
         <item>Science: Mathematics</item>
         <item>Mythology</item>
         <item>Sports</item>
@@ -20,6 +21,11 @@
         <item>Art</item>
         <item>Celebrities</item>
         <item>Animals</item>
+        <item>Vehicles</item>
+        <item>Entertainment: Comics</item>
+        <item>Science: Gadgets</item>
+        <item>Entertainment: Japanese Anime and Manga</item>
+        <item>Entertainment: Cartoon and Animations</item>
     </string-array>
 
 </resources>
