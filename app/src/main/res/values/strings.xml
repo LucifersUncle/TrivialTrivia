@@ -36,8 +36,8 @@
     <string name="textNumberOfSeconds">Time in Seconds:</string>
     <string name="buttonHostGame">Host Game</string>
     <string name="editTextGameName" />
-    <string name="dropDownDifficulty">Difficulty</string>
-    <string name="dropDownCategory">Category</string>
+    <string name="dropDownDifficulty"></string>
+    <string name="dropDownCategory"></string>
     <string name="txtAvailableGames">Available Games</string>
     <string name="buttonBack">Back</string>
 
