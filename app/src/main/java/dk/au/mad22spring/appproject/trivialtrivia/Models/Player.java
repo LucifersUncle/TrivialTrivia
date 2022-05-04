@@ -10,7 +10,7 @@ public class Player implements Serializable {
         //empty constructor for accessing object
     }
 
-    Player(String playerName, String role, String playerReference, int score) {
+    public Player(String playerName, String role, String playerReference, int score) {
         this.playerName = playerName;
         this.role = role;
         this.playerReference = playerReference;

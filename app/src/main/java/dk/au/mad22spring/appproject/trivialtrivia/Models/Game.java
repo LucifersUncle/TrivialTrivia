@@ -5,6 +5,8 @@ import java.util.HashMap;
 public class Game {
     private String gameName;
 
+    private String documentName;
+
     private int timePerRound, numberOfRounds, currentRound;
 
     private HashMap<String, Player> players;
@@ -20,6 +22,7 @@ public class Game {
         this.timePerRound = timePerRound;
         this.numberOfRounds = numberOfRounds;
         this.currentRound = 1;
+        this.documentName = documentName;
         this.gameIsActive = gameIsActive;
         this.gameIsStarted = gameIsStarted;
     }
@@ -50,5 +53,13 @@ public class Game {
     }
     public int getCurrentRound() {
         return currentRound;
+    }
+
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
 }

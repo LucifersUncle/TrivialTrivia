@@ -42,7 +42,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     private JoinGameViewModel joinGameViewModel;
     private List<Game> lobbies;
 
-
+    private User userProfile = new User();
 
 
     @Override
@@ -77,8 +77,12 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     @Override
     public void onJoinGameClicked(int index) {
 
+        joinGameViewModel.getPlayer(userProfile);
 
-        //joinGameViewModel.addPlayerToLobby(playerName, gameName);
+        String documentName = lobbies.get(index).getDocumentName();
+        String playerName = userProfile.getUsername();
+
+        joinGameViewModel.addPlayerToLobby(playerName, documentName);
 
         Intent i = new Intent(this, LobbyActivity.class);
         i.putExtra(Constants.LOBBY_INDEX, index);
