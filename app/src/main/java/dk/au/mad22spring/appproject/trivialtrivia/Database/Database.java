@@ -100,4 +100,8 @@ public class Database {
         mDatabase.addValueEventListener(gameListener);
         return listOfGames;
     }
+
+ /*   public void addPlayerToLobby(String playerName, ){
+
+    }*/
 }

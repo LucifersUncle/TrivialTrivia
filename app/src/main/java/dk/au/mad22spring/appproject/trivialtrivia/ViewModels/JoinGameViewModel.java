@@ -26,4 +26,8 @@ public class JoinGameViewModel extends AndroidViewModel {
     public LiveData<List<Game>> getGames(){
         return db.getGames();
     }
+
+    public void addPlayerToLobby(){
+       // db.addPlayerToLobby();
+    }
 }

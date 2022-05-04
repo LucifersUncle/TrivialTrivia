@@ -6,4 +6,7 @@ public class Constants {
     public static final String DOC_OBJ = "DOC_OBJ";
 
     public static final String PLAYER_NAME = "PLAYER_NAME";
+
+    public static final String LOBBY_INDEX = "LOBBY_INDEX";
+
 }

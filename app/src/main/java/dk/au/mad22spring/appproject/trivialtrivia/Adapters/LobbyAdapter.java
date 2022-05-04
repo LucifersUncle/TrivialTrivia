@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Models.UserModel;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
@@ -21,13 +22,13 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
     //private ILobbyItemClickedListener listener;
 
     //Data in the adapter
-    private ArrayList<UserModel> userList;
+    private List<UserModel> userList;
 
     public LobbyAdapter(){
-
+        this.userList = new ArrayList<>();
     }
 
-    public void updateUserList(ArrayList<UserModel> lists){
+    public void updateUserList(List<UserModel> lists){
         userList = lists;
         notifyDataSetChanged();
     }
