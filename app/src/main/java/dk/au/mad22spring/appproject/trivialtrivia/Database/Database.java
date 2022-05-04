@@ -83,7 +83,8 @@ public class Database {
     }
 
     public LiveData<List<Game>> getGames(){
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies");
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies");
 
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
@@ -152,6 +153,39 @@ public class Database {
 
         }
     }
+
+    public LiveData<List<Player>> getPlayersInLobby(String documentName){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentName).child("players");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Iterable<DataSnapshot> players = snapshot.getChildren();
+                List<Player> playersList = new ArrayList<>();
+
+                for(DataSnapshot p : players){
+                    String playerDocument = p.getKey();
+                    String playerName = p.child("playerName").getValue().toString();
+                    String playerRole = p.child("role").getValue().toString();
+                    int playerScore = Integer.parseInt(p.child("score").getValue().toString()); //Skal måske være "Integer.parseInt()"
+
+                    Player player = new Player(playerName, documentName,playerRole,playerScore);
+                    playersList.add(player);
+                }
+                listOfPlayers.setValue(playersList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+        return listOfPlayers;
+    }
+
 
     /*
     public LiveData<Player> getPlayer(String documentID, String playerReference) {

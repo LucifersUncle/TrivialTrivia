@@ -86,6 +86,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
 
         Intent i = new Intent(this, LobbyActivity.class);
         i.putExtra(Constants.LOBBY_INDEX, index);
+        i.putExtra(Constants.DOC_OBJ, documentName);
         launcher.launch(i);
     }
 

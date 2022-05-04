@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.UserModel;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
@@ -22,13 +23,13 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
     //private ILobbyItemClickedListener listener;
 
     //Data in the adapter
-    private List<UserModel> userList;
+    private List<Player> userList;
 
     public LobbyAdapter(){
         this.userList = new ArrayList<>();
     }
 
-    public void updateUserList(List<UserModel> lists){
+    public void updateUserList(List<Player> lists){
         userList = lists;
         notifyDataSetChanged();
     }
@@ -44,7 +45,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
 
     @Override
     public void onBindViewHolder(@NonNull LobbyViewHolder holder, int position) {
-        holder.txtName.setText(userList.get(position).userName);
+        holder.txtName.setText(userList.get(position).getPlayerName());
     }
 
     @Override
