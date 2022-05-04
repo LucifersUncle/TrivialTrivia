@@ -12,13 +12,18 @@ import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Repository;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 
-public class LobbyViewModel extends AndroidViewModel {
+public class JoinGameViewModel extends AndroidViewModel {
+
     private Repository repository;
     private Database db;
 
-    public LobbyViewModel(@NonNull Application application){
+    public JoinGameViewModel(@NonNull Application application) {
         super(application);
-        //repository = Repository.getInstance(application);
+        db = Database.getInstance();
     }
 
+
+    public LiveData<List<Game>> getGames(){
+        return db.getGames();
+    }
 }

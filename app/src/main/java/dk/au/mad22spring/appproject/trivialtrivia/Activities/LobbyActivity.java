@@ -1,14 +1,18 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.List;
+
 import dk.au.mad22spring.appproject.trivialtrivia.Adapters.LobbyAdapter;
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 
@@ -21,6 +25,7 @@ public class LobbyActivity extends AppCompatActivity {
     private RecyclerView rcvList;
     private LobbyAdapter adapter;
     private LobbyViewModel vm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class LobbyActivity extends AppCompatActivity {
         rcvList = findViewById(R.id.rcv_lobby_players);
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
+
+
 
     }
 }
