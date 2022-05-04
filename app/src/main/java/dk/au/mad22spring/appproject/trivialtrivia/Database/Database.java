@@ -140,7 +140,9 @@ public class Database {
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     if(task.isSuccessful()){
                         username2 = task.getResult().getValue().toString();
+                        Log.d("GUSTAV", "onComplete: "+ username2);
                         userProfile.setUsername(username2);
+                        mDatabase.setValue(userProfile);
                     }
                 }
             });
