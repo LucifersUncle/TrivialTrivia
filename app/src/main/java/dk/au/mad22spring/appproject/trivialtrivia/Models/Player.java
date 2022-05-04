@@ -6,7 +6,7 @@ public class Player implements Serializable {
     private String playerName, role, playerReference;
     private int score;
 
-    Player() {
+    public Player() {
         //empty constructor for accessing object
     }
 
@@ -44,6 +44,7 @@ public class Player implements Serializable {
     public void setScore(int score) {
         this.score = score;
     }
+
 
 
 

@@ -25,7 +25,7 @@ import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewModel;
 
 
-public class GameSettingsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class GameSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     NumberPicker roundsPicker, timePicker;
     Button buttonHostGame;
@@ -104,32 +104,34 @@ public class GameSettingsActivity extends AppCompatActivity implements View.OnCl
 
         //region Buttons
         buttonHostGame = (Button) findViewById(R.id.buttonHostGame);
-        buttonHostGame.setOnClickListener(this);
-        //endregion
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.buttonHostGame:
+        buttonHostGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 String game = gameName.getText().toString();
+                String category = categorySelected;
+                String difficulty = difficultySelected;
+
 
                 if (game.isEmpty()) {
                     gameName.setError("Game name cannot be empty!");
                     gameName.requestFocus();
                 } else {
-                    String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, "test");
+                    String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, "test", category, difficulty);
 
                     Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
                     intent.putExtra(Constants.PLAYER_OBJ, "host");
                     intent.putExtra(Constants.GAME_OBJ, game);
+                    intent.putExtra(Constants.CATEGORY_OBJ, category);
+                    intent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
                     intent.putExtra(Constants.DOC_OBJ, documentName);
                     launcher.launch(intent);
                 }
-                break;
-        }
-    }
 
+
+            }
+        });
+        //endregion
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
