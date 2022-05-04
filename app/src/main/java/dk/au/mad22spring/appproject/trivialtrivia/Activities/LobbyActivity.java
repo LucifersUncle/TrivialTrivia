@@ -33,10 +33,12 @@ public class LobbyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lobby);
 
         // Get data from the other activity
+
         String game = (String) getIntent().getSerializableExtra(Constants.GAME_OBJ);
         player = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
         playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
         documentName = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
+
 
         vm = new ViewModelProvider(this).get(LobbyViewModel.class);
         // Get data from DB

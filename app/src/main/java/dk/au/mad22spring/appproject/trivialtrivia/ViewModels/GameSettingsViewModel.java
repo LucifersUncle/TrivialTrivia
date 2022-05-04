@@ -17,7 +17,7 @@ public class GameSettingsViewModel extends AndroidViewModel {
         db  = Database.getInstance();
     }
 
-    public String addGameToDb(String gameName, int timePerRound, int numberOfRounds, String playerName) {
-        return db.addGame(gameName, timePerRound, numberOfRounds, playerName);
+    public String addGameToDb(String gameName, int timePerRound, int numberOfRounds, String playerName, String category, String difficulty) {
+        return db.addGame(gameName, timePerRound, numberOfRounds, playerName, category, difficulty);
     }
 }
