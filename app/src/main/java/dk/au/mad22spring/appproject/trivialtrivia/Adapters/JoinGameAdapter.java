@@ -54,7 +54,7 @@ public class JoinGameAdapter extends RecyclerView.Adapter<JoinGameAdapter.JoinGa
         return gameList.size();
     }
 
-    public class JoinGameViewHolder extends RecyclerView.ViewHolder {
+    public class JoinGameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textViewGameName;
 
@@ -65,6 +65,14 @@ public class JoinGameAdapter extends RecyclerView.Adapter<JoinGameAdapter.JoinGa
 
             textViewGameName = itemView.findViewById(R.id.textviewGameName);
             listener = joinGameItemClickedListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            listener.onJoinGameClicked(getAdapterPosition());
         }
     }
 }

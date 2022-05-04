@@ -1,13 +1,15 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Database;
 
-import android.mtp.MtpConstants;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,10 +22,14 @@ import java.util.UUID;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 
 public class Database {
     private static Database instance;
     private DatabaseReference mDatabase;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user;
 
     private MutableLiveData<List<Game>> listOfGames;
     private MutableLiveData<List<Player>> listOfPlayers;
@@ -60,7 +66,8 @@ public class Database {
     }
 
     public String addGame(String gameName, int timePerRound, int numberOfRounds, String playerName) {
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobby");
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies");
 
         String documentName = UUID.randomUUID().toString();
 
@@ -71,8 +78,9 @@ public class Database {
         return documentName;
     }
 
-    public LiveData<List<Game>> getGames(){
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobby");
+    public LiveData<List<Game>> getGames() {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies");
 
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
@@ -81,7 +89,7 @@ public class Database {
 
                 List<Game> lobbiesList = new ArrayList<Game>();
 
-                for(DataSnapshot lobby : lobbies){
+                for (DataSnapshot lobby : lobbies) {
                     String gameName = lobby.child("gameName").getValue().toString();
                     String documentName = UUID.randomUUID().toString();
 
@@ -100,4 +108,44 @@ public class Database {
         mDatabase.addValueEventListener(gameListener);
         return listOfGames;
     }
+
+    public void addPlayerToLobby(String playerName, String documentName) {
+        String uniqueId = UUID.randomUUID().toString();
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentName)
+                .child("players")
+                .child(uniqueId);
+
+        Player player = new Player(playerName, "player", uniqueId, 0);
+
+        mDatabase.setValue(player);
+
+
+    }
+
+    public void getPlayerName(User userP) {
+        user = mAuth.getCurrentUser();
+        User userProfile = userP;
+        if (user != null) {
+            String userEmail = user.getEmail();
+            String userId = user.getUid();
+
+            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .getReference("Users").child(userId).child("username"); //.child("username")
+
+            mDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                String username2;
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()){
+                        username2 = task.getResult().getValue().toString();
+                        userProfile.setUsername(username2);
+                    }
+                }
+            });
+
+        }
+    }
+
 }
