@@ -1,12 +1,20 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +30,7 @@ import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 
-public class LobbyActivity extends AppCompatActivity {
+public class LobbyActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String player;
     private String documentName;
@@ -38,6 +46,8 @@ public class LobbyActivity extends AppCompatActivity {
     private LobbyAdapter adapter;
     private LobbyViewModel vm;
 
+    private Button buttonStartGame;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,8 @@ public class LobbyActivity extends AppCompatActivity {
         //playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
         documentName = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
 
+        buttonStartGame = (Button) findViewById(R.id.btn_lobby_startGame);
+        buttonStartGame.setOnClickListener(this);
 
         // Get data from DB
         /*
@@ -74,5 +86,20 @@ public class LobbyActivity extends AppCompatActivity {
                 adapter.updateUserList(playersList);
             }
         });
+    }
+
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                //Handle the result here
+            }
+        }
+    });
+
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(LobbyActivity.this, ActiveGameActivity.class));
     }
 }
