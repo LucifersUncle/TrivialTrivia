@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/textLoginHeader"
@@ -57,6 +58,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/button"
         android:text="@string/buttonLogin"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline8"
@@ -76,7 +78,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="128dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/border"
+        android:background="@drawable/textinput"
         android:ems="10"
         android:hint="email"
         android:inputType="textEmailAddress"
@@ -94,7 +96,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/border"
+        android:background="@drawable/textinput"
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".Activities.HomeActivity">
 
     <TextView
@@ -53,6 +54,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/button_back"
         android:text="@string/buttonLogOut"
         app:layout_constraintBottom_toTopOf="@+id/guideline15"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
@@ -83,6 +85,7 @@
         android:layout_width="130dp"
         android:layout_height="131dp"
         android:layout_marginTop="64dp"
+        android:backgroundTint="@color/button"
         android:text="@string/buttonCreateGame"
         app:layout_constraintEnd_toStartOf="@+id/guideline13"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -93,6 +96,7 @@
         android:layout_width="130dp"
         android:layout_height="131dp"
         android:layout_marginTop="64dp"
+        android:backgroundTint="@color/button"
         android:text="@string/buttonJoinGame"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline12"

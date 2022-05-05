@@ -5,7 +5,7 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
+    android:background="@drawable/textinput"
     android:padding="5dp">
 
     <TextView
@@ -27,9 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:text="score"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:text="score"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_listResults_playerName"
         app:layout_constraintTop_toTopOf="parent" />

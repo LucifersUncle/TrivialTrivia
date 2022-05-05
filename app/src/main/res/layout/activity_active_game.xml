@@ -4,26 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".Activities.ActiveGameActivity">
-
 
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/txt_points"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
+        app:layout_constraintTop_toTopOf="@+id/guideline40" />
 
     <TextView
         android:id="@+id/txt_aGame_scorePoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="@+id/textView4"
         tools:text="xxxx" />
@@ -32,13 +35,14 @@
         android:id="@+id/txt_aGame_Question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/question"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:text="Question text will be showing here. Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah " />
 
@@ -54,9 +58,9 @@
         android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:layout_marginStart="16dp"
+        android:backgroundTint="@color/answers"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_Question"
         tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
 
@@ -65,9 +69,9 @@
         android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/answers"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_Question"
         tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
 
@@ -76,6 +80,7 @@
         android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:backgroundTint="@color/answers"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/txt_aGame_answer2"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_answer2"
@@ -86,13 +91,11 @@
         android:layout_width="168dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:backgroundTint="@color/answers"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/txt_aGame_answer1"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_answer1"
         tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
-
-
-
 
 
     <ProgressBar
@@ -103,8 +106,36 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline37"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline38"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

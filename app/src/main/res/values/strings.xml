@@ -40,5 +40,6 @@
     <string name="dropDownCategory"></string>
     <string name="txtAvailableGames">Available Games</string>
     <string name="buttonBack">Back</string>
+    <string name="btn_leave">Leave</string>
 
 </resources>
