@@ -19,7 +19,7 @@ public class JoinGameViewModel extends AndroidViewModel {
 
     public JoinGameViewModel(@NonNull Application application) {
         super(application);
-        db = Database.getInstance();
+        db = Database.getInstance(application);
     }
 
 

@@ -1,14 +1,20 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Database;
 
 import android.app.Application;
+import android.content.Context;
 import android.mtp.MtpConstants;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +34,7 @@ import java.util.UUID;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Questions.QuestionData;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 
 public class Database {
@@ -43,18 +52,21 @@ public class Database {
     private MutableLiveData<Boolean> gameState;
     private MutableLiveData<Boolean> gameStarted;
 
-    public static Database getInstance() {
+    Context context;
+    RequestQueue queue;
+
+    public static Database getInstance(Application application) {
         if (instance == null) {
             synchronized (Database.class) {
                 if (instance == null) {
-                    instance = new Database();
+                    instance = new Database(application);
                 }
             }
         }
         return instance;
     }
 
-    private Database() {
+    private Database(Application application) {
         listOfGames = new MutableLiveData<>();
         listOfGames.setValue(new ArrayList<>());
 
@@ -64,6 +76,7 @@ public class Database {
         player = new MutableLiveData<>();
         gameState = new MutableLiveData<>();
         gameStarted = new MutableLiveData<>();
+        context = application.getApplicationContext();
     }
 
     public String addGame(String gameName, int timePerRound, int numberOfRounds, String playerName, String category, String difficulty) {
@@ -115,7 +128,6 @@ public class Database {
         mDatabase.addValueEventListener(gameListener);
         return listOfGames;
     }
-
 
     public void addPlayerToLobby(String playerName, String documentName) {
         String uniqueId = UUID.randomUUID().toString();
@@ -190,6 +202,58 @@ public class Database {
         return listOfPlayers;
     }
 
+    public void getQuestions(){
 
+        //https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple
+        String baseURLstart = "https://opentdb.com/api.php?";
+        String baseURLend = "&type=multiple";
+        int amount=10; //Skal være det fra GameSettings
+        String amountURL = "amount="+amount;
+        String category = "9"; //Skal være det fra GameSettings
+        String categoryURL = "&category="+category;
+        String difficulty = "easy"; //Skal være det fra GameSettings
+        String difficultyURL = "&difficulty="+difficulty;
+        String URL="";
+
+        if(!category.isEmpty() && !difficulty.isEmpty()){ //category sat; difficulty sat
+            URL=baseURLstart+amountURL+categoryURL+difficultyURL+baseURLend;
+        }
+        else if(!category.isEmpty() && difficulty.isEmpty()){ //category sat; difficulty IKKE sat
+            URL=baseURLstart+amountURL+categoryURL+baseURLend;
+        }
+        else if(category.isEmpty() && !difficulty.isEmpty()){ //category IKKE sat; difficulty sat
+            URL=baseURLstart+amountURL+difficultyURL+baseURLend;
+        }
+        else if(category.isEmpty() && !difficulty.isEmpty()){ //category IKKE sat; difficulty IKKE sat
+            URL=baseURLstart+amountURL+baseURLend;
+        }
+        else{
+        }
+
+
+        if(queue==null){
+            queue = Volley.newRequestQueue(context);
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+                response -> {
+                    Log.d("GUSTAV", "onResponse: " + response);
+                    parseJson(response);
+
+                }, error -> {
+            Log.e("Gustav", "That did not work!", error);
+        });
+        queue.add(stringRequest);
+    }
+
+    private void parseJson(String json){
+        Gson gson = new GsonBuilder().create();
+        QuestionData questionData = gson.fromJson(json, QuestionData.class);
+        Log.d("GUSTAV", "parsJson: "+ questionData.getResults());
+
+
+    }
+
+    public void setQuestionsForGame(QuestionData questionData, String documentName ){}
 
 }

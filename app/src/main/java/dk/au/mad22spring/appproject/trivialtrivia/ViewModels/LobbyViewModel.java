@@ -17,7 +17,7 @@ public class LobbyViewModel extends AndroidViewModel {
 
     public LobbyViewModel(@NonNull Application application){
         super(application);
-        db = Database.getInstance();
+        db = Database.getInstance(application);
     }
 
     public LiveData<List<Player>> getPlayersInLobby(String documentName){

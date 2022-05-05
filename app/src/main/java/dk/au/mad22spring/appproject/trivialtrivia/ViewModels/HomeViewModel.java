@@ -7,15 +7,13 @@ import androidx.lifecycle.AndroidViewModel;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 
-public class GameViewModel extends AndroidViewModel {
-
+public class HomeViewModel extends AndroidViewModel {
     private Database db;
 
-    public GameViewModel(@NonNull Application application) {
+    public HomeViewModel(@NonNull Application application) {
         super(application);
         db = Database.getInstance(application);
+
     }
-
-
 
 }
