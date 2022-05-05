@@ -8,6 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Adapters.LobbyAdapter;
@@ -24,6 +29,10 @@ public class LobbyActivity extends AppCompatActivity {
     private String playerName;
     private List<Player> playersList;
 
+    private FirebaseUser user;
+    private DatabaseReference reference;
+    private String userID;
+
 
     private RecyclerView rcvList;
     private LobbyAdapter adapter;
@@ -39,12 +48,17 @@ public class LobbyActivity extends AppCompatActivity {
 
         String game = (String) getIntent().getSerializableExtra(Constants.GAME_OBJ);
         player = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
-        playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
+        //playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
         documentName = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
 
 
         // Get data from DB
+        /*
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users");
+        userID = user.getUid();
 
+         */
 
         //setup for recyclerview with adapter and layout manager
         adapter = new LobbyAdapter();

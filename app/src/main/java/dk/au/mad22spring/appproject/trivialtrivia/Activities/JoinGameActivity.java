@@ -4,7 +4,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,17 +26,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Adapters.JoinGameAdapter;
-import dk.au.mad22spring.appproject.trivialtrivia.Adapters.LobbyAdapter;
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.JoinGameViewModel;
-import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 
 public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapter.IJoinGameItemClickedListener {
 
@@ -46,12 +42,15 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     private RecyclerView rcvList;
     private JoinGameAdapter adapter;
 
-    private JoinGameViewModel joinGameViewModel;
+    private JoinGameViewModel vm;
     private List<Game> lobbies;
     private ArrayList<User> users;
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String playerName;
+
     private FirebaseUser user;
+    private DatabaseReference reference;
+    private String userID;
 
     private Player playerObj = new Player();
 
@@ -60,13 +59,35 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
 
+        // Get User Data from DB
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users");
+        userID = user.getUid();
+
+        //Get the username of the Current User of the App
+        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userProfile = snapshot.getValue(User.class);
+
+                if (userProfile != null) {
+                    playerName = userProfile.username;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         adapter = new JoinGameAdapter(this);
         rcvList = findViewById(R.id.rcvAvailableGames);
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
 
-        joinGameViewModel = new ViewModelProvider(this).get(JoinGameViewModel.class);
-        joinGameViewModel.getGames().observe(this, new Observer<List<Game>>() {
+        vm = new ViewModelProvider(this).get(JoinGameViewModel.class);
+        vm.getGames().observe(this, new Observer<List<Game>>() {
             @Override
             public void onChanged(List<Game> games) {
                 lobbies = games;
@@ -86,13 +107,15 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     @Override
     public void onJoinGameClicked(int index) {
 
+
         setupFirebaseListener();
         String documentName = lobbies.get(index).getDocumentName();
 
-        String playerName = playerObj.getPlayerName();
-        //joinGameViewModel.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
+
+        vm.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
 
         Intent i = new Intent(JoinGameActivity.this, LobbyActivity.class);
+        //i.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
         i.putExtra(Constants.LOBBY_INDEX, index);
         i.putExtra(Constants.DOC_OBJ, documentName);
         launcher.launch(i);
