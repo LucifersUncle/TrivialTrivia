@@ -60,11 +60,5 @@ public class LobbyActivity extends AppCompatActivity {
                 adapter.updateUserList(playersList);
             }
         });
-
-
-
-
-
-
     }
 }

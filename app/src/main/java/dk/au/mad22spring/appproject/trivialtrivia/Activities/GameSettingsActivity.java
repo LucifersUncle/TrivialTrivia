@@ -27,12 +27,12 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewMod
 
 public class GameSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    NumberPicker roundsPicker, timePicker;
-    Button buttonHostGame;
-    Spinner spinnerCategory, spinnerDifficulty;
-    EditText gameName;
+    private NumberPicker roundsPicker, timePicker;
+    private Button buttonHostGame;
+    private Spinner spinnerCategory, spinnerDifficulty;
+    private EditText gameName;
 
-    String difficultySelected="", categorySelected="";
+    private String difficultySelected="", categorySelected="";
 
     private GameSettingsViewModel vm;
     private int roundsPicked, timePickedPerRound;
@@ -133,6 +133,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         //endregion
     }
 
+    //region
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
@@ -211,10 +212,8 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                Toast.makeText(GameSettingsActivity.this, "YOU WIN", Toast.LENGTH_SHORT).show();
                 if (result.getResultCode() == RESULT_CANCELED) {
                     //finish();
-                    Toast.makeText(GameSettingsActivity.this, "YOU SUCK", Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -9,14 +9,11 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
-import dk.au.mad22spring.appproject.trivialtrivia.Database.Repository;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
-import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 
 public class JoinGameViewModel extends AndroidViewModel {
 
-    private Repository repository;
     private Database db;
 
     public JoinGameViewModel(@NonNull Application application) {
