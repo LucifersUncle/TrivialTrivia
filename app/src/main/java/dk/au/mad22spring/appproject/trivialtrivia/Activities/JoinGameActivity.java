@@ -103,14 +103,14 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
             }
         });
 
-        vm.getQuestions();
+        //vm.getQuestions();
     }
 
     @Override
     public void onJoinGameClicked(int index) {
 
 
-        setupFirebaseListener();
+        //setupFirebaseListener();
         String documentName = lobbies.get(index).getDocumentName();
 
 
@@ -123,6 +123,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         launcher.launch(i);
     }
 
+    //region firebaseListener: 99% sikker på den ingenting gør
     private void setupFirebaseListener() {
         DatabaseReference dRef = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users");                 //get database
@@ -150,6 +151,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         });
 
     }
+    //endregion
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),   //default contract
