@@ -102,6 +102,8 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
                 finish();
             }
         });
+
+        vm.getQuestions();
     }
 
     @Override

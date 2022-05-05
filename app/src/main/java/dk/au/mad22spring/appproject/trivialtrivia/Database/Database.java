@@ -35,6 +35,7 @@ import java.util.UUID;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Questions.QuestionData;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Questions.Result;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 
 public class Database {
@@ -249,11 +250,29 @@ public class Database {
     private void parseJson(String json){
         Gson gson = new GsonBuilder().create();
         QuestionData questionData = gson.fromJson(json, QuestionData.class);
-        Log.d("GUSTAV", "parsJson: "+ questionData.getResults());
 
-
+        setQuestionsForGame(questionData);
     }
 
-    public void setQuestionsForGame(QuestionData questionData, String documentName ){}
+    public void setQuestionsForGame(QuestionData questionData){
+        //Skal ikke være statisk, men have ID med
+        String lobbyID = "7dbd9bdc-5f05-4892-be71-9c2adb985083";
+
+        List<Result> results = questionData.getResults();
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(lobbyID);
+
+
+        for(Result r : results){
+            String category = r.getCategory();
+            String difficulty = r.getDifficulty();
+            String question = r.getQuestion();
+            String correctAnswer = r.getCorrectAnswer();
+            List<String> incorrectAnswer = r.getIncorrectAnswers();
+
+            mDatabase.child("questions").push().setValue(r);
+        }
+    }
+
 
 }

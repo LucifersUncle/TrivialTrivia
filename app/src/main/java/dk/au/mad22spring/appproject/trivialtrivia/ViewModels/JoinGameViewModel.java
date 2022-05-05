@@ -35,4 +35,8 @@ public class JoinGameViewModel extends AndroidViewModel {
         db.getPlayerName(playerObj);
     }
 
+    public void getQuestions(){
+        db.getQuestions();
+    }
+
 }
