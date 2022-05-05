@@ -1,5 +1,6 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Database;
 
+import android.app.Application;
 import android.mtp.MtpConstants;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -60,7 +62,6 @@ public class Database {
         listOfPlayers.setValue(new ArrayList<>());
 
         player = new MutableLiveData<>();
-
         gameState = new MutableLiveData<>();
         gameStarted = new MutableLiveData<>();
     }
@@ -83,7 +84,8 @@ public class Database {
     }
 
     public LiveData<List<Game>> getGames(){
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies");
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies");
 
         ValueEventListener gameListener = new ValueEventListener() {
             @Override
@@ -114,6 +116,7 @@ public class Database {
         return listOfGames;
     }
 
+
     public void addPlayerToLobby(String playerName, String documentName) {
         String uniqueId = UUID.randomUUID().toString();
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -125,43 +128,68 @@ public class Database {
         Player player = new Player(playerName, "player", uniqueId, 0);
 
         mDatabase.setValue(player);
-
-
     }
 
-    public void getPlayerName(User userP) {
+    //region Funktion - Dette skal være den som sætter playerName - OBS: Virker ikke
+    public void getPlayerName(Player playerObj) {
         user = mAuth.getCurrentUser();
-        User userProfile = userP;
+
         if (user != null) {
-            String userEmail = user.getEmail();
             String userId = user.getUid();
 
             mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                    .getReference("Users").child(userId).child("username"); //.child("username")
+                    .getReference("Users").child(userId);
 
-            mDatabase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                String username2;
+            Query usernameQuery = mDatabase.orderByChild("username");
+
+            usernameQuery.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if(task.isSuccessful()){
-                        username2 = task.getResult().getValue().toString();
-                        Log.d("GUSTAV", "onComplete: "+ username2);
-                        userProfile.setUsername(username2);
-                        mDatabase.setValue(userProfile);
-                    }
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String name = snapshot.child("username").getValue().toString();
+                    //player2.setPlayerName(name); //har fjernet player2 initialiseringen
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
             });
-
         }
     }
+    //endregion
 
-    /*
-    public LiveData<Player> getPlayer(String documentID, String playerReference) {
+    public LiveData<List<Player>> getPlayersInLobby(String documentName){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentName).child("players");
 
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Iterable<DataSnapshot> players = snapshot.getChildren();
+                List<Player> playersList = new ArrayList<>();
+
+                for(DataSnapshot p : players){
+                    String playerDocument = p.child("documentName").toString();
+                    String playerName = p.child("playerName").getValue().toString();
+                    String playerRole = p.child("role").getValue().toString();
+                    int playerScore = Integer.parseInt(p.child("score").getValue().toString());
+
+                    Player player = new Player(playerName, documentName,playerRole,playerScore); //Overvej at bruge playerDocument i stedet for documentName
+                    playersList.add(player);
+                }
+                listOfPlayers.setValue(playersList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+        return listOfPlayers;
     }
 
-    public LiveData<Player> getPlayers(String documentID) {
 
-    }
-     */
+
 }

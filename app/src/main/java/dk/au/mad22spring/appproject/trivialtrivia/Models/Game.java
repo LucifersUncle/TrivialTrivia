@@ -26,6 +26,7 @@ public class Game {
         this.gameIsStarted = gameIsStarted;
         this.category = category;
         this.difficulty = difficulty;
+        this.documentName = documentName;
 
         String playerId = UUID.randomUUID().toString();
 

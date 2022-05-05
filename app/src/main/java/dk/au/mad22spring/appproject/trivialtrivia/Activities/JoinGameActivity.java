@@ -2,7 +2,9 @@ package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +19,11 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +48,12 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
 
     private JoinGameViewModel joinGameViewModel;
     private List<Game> lobbies;
+    private ArrayList<User> users;
 
-    private User userProfile = new User();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user;
 
+    private Player playerObj = new Player();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +64,6 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         rcvList = findViewById(R.id.rcvAvailableGames);
         rcvList.setLayoutManager(new LinearLayoutManager(this));
         rcvList.setAdapter(adapter);
-
 
         joinGameViewModel = new ViewModelProvider(this).get(JoinGameViewModel.class);
         joinGameViewModel.getGames().observe(this, new Observer<List<Game>>() {
@@ -77,16 +86,44 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     @Override
     public void onJoinGameClicked(int index) {
 
-        joinGameViewModel.getPlayer(userProfile);
-
+        setupFirebaseListener();
         String documentName = lobbies.get(index).getDocumentName();
-        String playerName = userProfile.getUsername();
 
-        joinGameViewModel.addPlayerToLobby(playerName, documentName);
+        String playerName = playerObj.getPlayerName();
+        //joinGameViewModel.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
 
-        Intent i = new Intent(this, LobbyActivity.class);
+        Intent i = new Intent(JoinGameActivity.this, LobbyActivity.class);
         i.putExtra(Constants.LOBBY_INDEX, index);
+        i.putExtra(Constants.DOC_OBJ, documentName);
         launcher.launch(i);
+    }
+
+    private void setupFirebaseListener() {
+        DatabaseReference dRef = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Users");                 //get database
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();       //get the users id
+        DatabaseReference refName = dRef.child(userId);     //get reference to the list for the given user
+
+        refName.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                users = new ArrayList<User>();
+                Iterable<DataSnapshot> snapshots = snapshot.getChildren();  //gets all children in userId
+                Log.i("TAG", "onDataChange: "+ snapshots);
+
+                String name = snapshot.child("username").getValue().toString(); //saves username in variable
+                playerObj.setPlayerName(name); //sets name of the playerOBJ initialised at the top
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("TAG", "onCancelled: ", error.toException());
+            }
+        });
+
     }
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
