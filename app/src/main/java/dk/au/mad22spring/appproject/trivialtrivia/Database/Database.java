@@ -52,8 +52,9 @@ public class Database {
     private MutableLiveData<Player> player;
     private MutableLiveData<Integer> currentRound;
 
-    private MutableLiveData<Boolean> gameState;
+    private MutableLiveData<Boolean> gameActive;
     private MutableLiveData<Boolean> gameStarted;
+    private MutableLiveData<ActiveGame> aQuestion;
 
     Context context;
     RequestQueue queue;
@@ -82,26 +83,11 @@ public class Database {
         player = new MutableLiveData<>();
         gameActive = new MutableLiveData<>();
         gameStarted = new MutableLiveData<>();
+        currentRound = new MutableLiveData<>();
         context = application.getApplicationContext();
     }
 
-    public String addGame(String gameName, int timePerRound, int numberOfRounds, String playerName, String category, String difficulty) {
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies");
-
-        String documentName = UUID.randomUUID().toString();
-
-        Game game = new Game(gameName, timePerRound, numberOfRounds, playerName, documentName, true, false, category, difficulty);
-
-        mDatabase.child(documentName).setValue(game);
-
-        return documentName;
-    }
-
-    public void removeGame(String documentName) {
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentName);
-        mDatabase.removeValue();
-    }
-
+    //region Games
     public LiveData<List<Game>> getGames(){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies");
@@ -137,52 +123,25 @@ public class Database {
         return listOfGames;
     }
 
+    public String addGame(String gameName, int timePerRound, int numberOfRounds, String playerName, String category, String difficulty) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies");
+
+        String documentName = UUID.randomUUID().toString();
+
+        Game game = new Game(gameName, timePerRound, numberOfRounds, playerName, documentName, true, false, category, difficulty);
+
+        mDatabase.child(documentName).setValue(game);
+
+        return documentName;
+    }
+
     public void removeGame(String documentName) {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentName);
         mDatabase.removeValue();
     }
-
-    public void addPlayerToLobby(String playerName, String documentName) {
-        String uniqueId = UUID.randomUUID().toString();
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Lobbies")
-                .child(documentName)
-                .child("players")
-                .child(uniqueId);
-
-        Player player = new Player(playerName, "player", uniqueId, 0);
-
-        mDatabase.setValue(player);
-    }
-
-    //region Funktion - Dette skal være den som sætter playerName - OBS: Virker ikke
-    public void getPlayerName(Player playerObj) {
-        user = mAuth.getCurrentUser();
-
-        if (user != null) {
-            String userId = user.getUid();
-
-            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                    .getReference("Users").child(userId);
-
-            Query usernameQuery = mDatabase.orderByChild("username");
-
-            usernameQuery.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String name = snapshot.child("username").getValue().toString();
-                    //player2.setPlayerName(name); //har fjernet player2 initialiseringen
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-    }
     //endregion
 
+    //region Players
     public LiveData<List<Player>> getPlayersInLobby(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName).child("players");
@@ -212,7 +171,55 @@ public class Database {
         return listOfPlayers;
     }
 
-    //region Get questions
+    public void addPlayerToLobby(String playerName, String documentName) {
+        String uniqueId = UUID.randomUUID().toString();
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentName)
+                .child("players")
+                .child(uniqueId);
+
+        Player player = new Player(playerName, "player", uniqueId, 0);
+
+        mDatabase.setValue(player);
+    }
+
+    public void removePlayer(String playerName, String documentID) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentID).child("players");
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> allPlayers = snapshot.getChildren();
+
+                for (DataSnapshot player : allPlayers) {
+                    try {
+                        String playerNameFound = player.child("playerName").getValue().toString();
+                        String playerDocument = player.getKey();
+
+                        if (playerName.equals(playerNameFound)) {
+                            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                                    .getReference("Lobbies")
+                                    .child(documentID)
+                                    .child("players")
+                                    .child(playerDocument);
+                            mDatabase.removeValue();
+                        }
+                    } catch (Exception e) {
+                        Log.d("Database", "onDataChange: Something went wrong when removing player!");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    //endregion
+
+    //region Questions
     public void getQuestions(String documentName, int roundsPicked, String categoryPicked, String difficultyPicked){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName);
@@ -281,10 +288,10 @@ public class Database {
             String correctAnswer = r.getCorrectAnswer();
             List<String> incorrectAnswer = r.getIncorrectAnswers();
 
-
             mDatabase.child("questions").push().setValue(r);
         }
     }
+    //endregion
     //endregion
 
 
@@ -344,40 +351,6 @@ public class Database {
     }
 
     //region State Management
-    public void removePlayer(String playerName, String documentID) {
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentID).child("players");
-
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> allPlayers = snapshot.getChildren();
-
-                for (DataSnapshot player : allPlayers) {
-                    try {
-                        String playerNameFound = player.child("playerName").getValue().toString();
-                        String playerDocument = player.getKey();
-
-                        if (playerName.equals(playerNameFound)) {
-                            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                                    .getReference("Lobbies")
-                                    .child(documentID)
-                                    .child("players")
-                                    .child(playerDocument);
-                            mDatabase.removeValue();
-                        }
-                    } catch (Exception e) {
-                        Log.d("Database", "onDataChange: Something went wrong when removing player!");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public void setActiveState(boolean state, String documentID) {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies")
@@ -436,5 +409,53 @@ public class Database {
         });
         return gameStarted;
     }
+
+    //endregion
+
+    //region Active Game Player Attributes
+    public void setPlayerScore(String documentID, String playerReference, int currentScore) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentID)
+                .child("players")
+                .child(playerReference)
+                .child("score");
+        mDatabase.setValue(currentScore + 1);
+    }
+
+    public void setNextRound(String documentID, int currentRound) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentID)
+                .child("round");
+        mDatabase.setValue(currentRound + 1);
+    }
+
+    public LiveData<Integer> getCurrentRound(String documentID) {
+        currentRound.setValue(null);
+
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentID)
+                .child("round");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null) {
+                    return;
+                }
+
+                int roundNumber = Integer.parseInt(snapshot.getValue().toString());
+                currentRound.setValue(roundNumber);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return currentRound;
+    }
+
     //endregion
 }

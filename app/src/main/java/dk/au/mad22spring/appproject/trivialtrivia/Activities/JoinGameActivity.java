@@ -112,46 +112,19 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
 
         //setupFirebaseListener();
         String documentName = lobbies.get(index).getDocumentName();
+        String gameName = lobbies.get(index).getGameName();
 
 
         vm.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
 
         Intent i = new Intent(JoinGameActivity.this, LobbyActivity.class);
-        //i.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
+        i.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
         i.putExtra(Constants.LOBBY_INDEX, index);
         i.putExtra(Constants.DOC_OBJ, documentName);
+        i.putExtra(Constants.GAME_OBJ, gameName);
+        i.putExtra(Constants.PLAYER_OBJ, "player");
         launcher.launch(i);
     }
-
-    //region firebaseListener: 99% sikker på den ingenting gør
-    private void setupFirebaseListener() {
-        DatabaseReference dRef = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users");                 //get database
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();       //get the users id
-        DatabaseReference refName = dRef.child(userId);     //get reference to the list for the given user
-
-        refName.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                users = new ArrayList<User>();
-                Iterable<DataSnapshot> snapshots = snapshot.getChildren();  //gets all children in userId
-                Log.i("TAG", "onDataChange: "+ snapshots);
-
-                String name = snapshot.child("username").getValue().toString(); //saves username in variable
-                playerObj.setPlayerName(name); //sets name of the playerOBJ initialised at the top
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("TAG", "onCancelled: ", error.toException());
-            }
-        });
-
-    }
-    //endregion
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),   //default contract

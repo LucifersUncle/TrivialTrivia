@@ -56,7 +56,7 @@ public class ActiveGameActivity extends AppCompatActivity {
                 buttonAnswer4.setText(activeGame.getIncorrectAnswer3());
                 textViewAnswerQuestion.setText(activeGame.getQuestion());*/
             }
-        })
+        });
 //endregion
 
 
