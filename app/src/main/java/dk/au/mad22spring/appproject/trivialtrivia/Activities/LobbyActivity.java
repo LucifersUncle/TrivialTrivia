@@ -93,6 +93,9 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(LobbyActivity.this, ActiveGameActivity.class));
+        Intent i = new Intent(LobbyActivity.this, ActiveGameActivity.class);
+        i.putExtra(Constants.DOC_OBJ, documentName);
+        launcher.launch(i);
+
     }
 }
