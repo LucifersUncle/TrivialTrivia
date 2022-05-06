@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 
@@ -15,6 +16,8 @@ public class GameViewModel extends AndroidViewModel {
         super(application);
         db = Database.getInstance(application);
     }
+
+
 
 
 

@@ -117,7 +117,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
 
         vm.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
 
-        Intent i = new Intent(JoinGameActivity.this, LobbyActivity.class);
+        Intent i = new Intent(getApplicationContext(), LobbyActivity.class);
         i.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
         i.putExtra(Constants.LOBBY_INDEX, index);
         i.putExtra(Constants.DOC_OBJ, documentName);

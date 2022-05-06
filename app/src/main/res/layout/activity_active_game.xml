@@ -9,26 +9,16 @@
 
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/txt_points"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline37"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline40" />
-
-    <TextView
         android:id="@+id/txt_aGame_scorePoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="72dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintStart_toStartOf="@+id/guideline41"
+        app:layout_constraintTop_toTopOf="@+id/guideline40"
         tools:text="xxxx" />
 
     <TextView
@@ -39,7 +29,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/question"
-        android:textSize="20sp"
+        android:padding="10dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/guideline38"
@@ -57,45 +48,51 @@
         android:id="@+id/txt_aGame_answer1"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/answers"
-        android:textSize="16sp"
+        android:minHeight="100dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline41"
         app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_Question"
-        tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
+        tools:text="Answer 1" />
 
     <Button
         android:id="@+id/txt_aGame_answer2"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/answers"
-        android:textSize="16sp"
+        android:minHeight="100dp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintStart_toStartOf="@+id/guideline41"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_Question"
-        tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
+        tools:text="Answer 2" />
 
     <Button
         android:id="@+id/txt_aGame_answer4"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/answers"
-        android:textSize="16sp"
+        android:minHeight="100dp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/txt_aGame_answer2"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_answer2"
-        tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
+        tools:text="Answer 4" />
 
     <Button
         android:id="@+id/txt_aGame_answer3"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/answers"
-        android:textSize="16sp"
+        android:minHeight="100dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/txt_aGame_answer1"
         app:layout_constraintTop_toBottomOf="@+id/txt_aGame_answer1"
-        tools:text="Answer 1. Blah Blah Blah Blah Blah Blah Blah " />
+        tools:text="Answer 3" />
 
 
     <ProgressBar
@@ -104,11 +101,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="116dp"
         android:layout_marginEnd="64dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/guideline40" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline37"
@@ -137,5 +135,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="16dp" />
+
+    <Button
+        android:id="@+id/buttonLeaveActiveGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/button_back"
+        android:text="@string/buttonLeaveActiveGave"
+        app:layout_constraintBottom_toTopOf="@+id/guideline39"
+        app:layout_constraintStart_toStartOf="@+id/guideline38" />
+
+    <TextView
+        android:id="@+id/textScoreActiveGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="@string/textScoreActiveGame"
+        app:layout_constraintEnd_toStartOf="@+id/guideline41"
+        app:layout_constraintHorizontal_bias="0.934"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
+        app:layout_constraintTop_toTopOf="@+id/guideline40" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="205dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

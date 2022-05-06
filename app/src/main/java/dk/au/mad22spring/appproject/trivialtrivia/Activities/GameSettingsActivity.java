@@ -28,7 +28,7 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewMod
 public class GameSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private NumberPicker roundsPicker, timePicker;
-    private Button buttonHostGame;
+    private Button buttonHostGame, buttonsSettingsBack;
     private Spinner spinnerCategory, spinnerDifficulty;
     private EditText gameName;
 
@@ -42,7 +42,48 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
 
+        String playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
+
         vm = new ViewModelProvider(this).get(GameSettingsViewModel.class);
+
+
+        //region Buttons
+        buttonsSettingsBack = (Button) findViewById(R.id.button_setting_back);
+        buttonsSettingsBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        buttonHostGame = (Button) findViewById(R.id.buttonHostGame);
+        buttonHostGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String game = gameName.getText().toString();
+                String category = categorySelected;
+                String difficulty = difficultySelected;
+
+                if (game.isEmpty()) {
+                    gameName.setError("Game name cannot be empty!");
+                    gameName.requestFocus();
+                } else {
+                    String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, playerName, category, difficulty);
+                    vm.getQuestions(documentName, roundsPicked, category, difficulty);
+
+                    Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+                    intent.putExtra(Constants.PLAYER_OBJ, "host");
+                    intent.putExtra(Constants.GAME_OBJ, game);
+                    intent.putExtra(Constants.CATEGORY_OBJ, category);
+                    intent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
+                    intent.putExtra(Constants.DOC_OBJ, documentName);
+                    launcher.launch(intent);
+                }
+
+
+            }
+        });
+        //endregion
 
         //region Category Dropdown menu
         //Set up drop down with ArrayAdapter for Category
@@ -102,37 +143,6 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         });
         //endregion
 
-        //region Buttons
-        buttonHostGame = (Button) findViewById(R.id.buttonHostGame);
-        buttonHostGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String game = gameName.getText().toString();
-                String category = categorySelected;
-                String difficulty = difficultySelected;
-
-
-
-                if (game.isEmpty()) {
-                    gameName.setError("Game name cannot be empty!");
-                    gameName.requestFocus();
-                } else {
-                    String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, "test", category, difficulty);
-                    vm.getQuestions(documentName, roundsPicked, category, difficulty);
-
-                    Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
-                    intent.putExtra(Constants.PLAYER_OBJ, "host");
-                    intent.putExtra(Constants.GAME_OBJ, game);
-                    intent.putExtra(Constants.CATEGORY_OBJ, category);
-                    intent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
-                    intent.putExtra(Constants.DOC_OBJ, documentName);
-                    launcher.launch(intent);
-                }
-
-
-            }
-        });
-        //endregion
     }
 
     //region
@@ -202,7 +212,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
                 }
                 break;
         }
-        Log.d("GUSTAV", "Difficulty: "+difficultySelected +" Category:" + categorySelected);
+        Log.d("GUSTAV", "Difficulty: " + difficultySelected + " Category:" + categorySelected);
     }
 
     @Override
@@ -213,9 +223,9 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Activity.RESULT_OK) {
+            if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
                 if (result.getResultCode() == RESULT_CANCELED) {
-                    //finish();
+                    finish();
                 }
             }
         }

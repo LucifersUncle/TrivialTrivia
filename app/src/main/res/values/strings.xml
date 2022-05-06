@@ -41,5 +41,7 @@
     <string name="txtAvailableGames">Available Games</string>
     <string name="buttonBack">Back</string>
     <string name="btn_leave">Leave</string>
+    <string name="buttonLeaveActiveGave">Leave</string>
+    <string name="textScoreActiveGame">Score</string>
 
 </resources>

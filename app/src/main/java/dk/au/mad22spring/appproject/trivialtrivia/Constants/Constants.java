@@ -11,6 +11,8 @@ public class Constants {
 
     public static final String LOBBY_INDEX = "LOBBY_INDEX";
 
+    public static final int LOBBY_ACTIVITY = 201;
+    public static final int GAME_ACTIVITY_HOST = 301;
     public static final int GAME_ACTIVITY_PLAYER = 401;
 
 }
