@@ -57,6 +57,7 @@ public class Database {
     private MutableLiveData<ActiveGame> aQuestion;
 
     private List<String> keyList ;
+    private MutableLiveData<List<String>> listOfQuestionKeys;
 
     Context context;
     RequestQueue queue;
@@ -78,6 +79,8 @@ public class Database {
 
         listOfPlayers = new MutableLiveData<>();
         listOfPlayers.setValue(new ArrayList<>());
+
+        listOfQuestionKeys = new MutableLiveData<>();
 
         //listOfQuestions;
         aQuestion = new MutableLiveData<>();
@@ -294,6 +297,7 @@ public class Database {
             String questionKey = mDatabase.child("questions").push().getKey();
             mDatabase.child("questions").child(questionKey).setValue(r);
             keyList.add(questionKey);
+            listOfQuestionKeys.setValue(keyList);
         }
     }
     //endregion
@@ -304,6 +308,8 @@ public class Database {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName);
 
+        //addQuestionKey(documentName);
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -312,8 +318,10 @@ public class Database {
                 if(snapshot.getValue() == null){
                     return;
                 }
-                String gameName = snapshot.child("gameName").getValue().toString();
+                //String gameName = snapshot.child("gameName").getValue().toString();
                 String questionKey = keyList.get(0);
+                //List<String> questionKey = listOfQuestionKeys.getValue();
+
 /*
                 String category = snapshot.child("category").getValue().toString();
                 int currentRound = snapshot.child("currentRound").getValue(int.class);
@@ -356,6 +364,31 @@ public class Database {
             }
         });
         return aQuestion;
+    }
+
+    private void addQuestionKey(String documentName){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentName).child("questions");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> keys = snapshot.getChildren();
+                List<String> keyList = new ArrayList<>();
+
+                for(DataSnapshot key : keys){
+                    keyList.add(key.getKey());
+                }
+                listOfQuestionKeys.setValue(keyList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     //region State Management
