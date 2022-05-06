@@ -56,6 +56,8 @@ public class Database {
     private MutableLiveData<Boolean> gameStarted;
     private MutableLiveData<ActiveGame> aQuestion;
 
+    private List<String> keyList ;
+
     Context context;
     RequestQueue queue;
 
@@ -79,6 +81,7 @@ public class Database {
 
         //listOfQuestions;
         aQuestion = new MutableLiveData<>();
+        keyList = new ArrayList<>();
 
         player = new MutableLiveData<>();
         gameActive = new MutableLiveData<>();
@@ -282,13 +285,15 @@ public class Database {
                 .getReference("Lobbies").child(lobbyID);
 
         for(Result r : results){
-            String category = r.getCategory();
+            /*String category = r.getCategory();
             String difficulty = r.getDifficulty();
             String question = r.getQuestion();
             String correctAnswer = r.getCorrectAnswer();
-            List<String> incorrectAnswer = r.getIncorrectAnswers();
+            List<String> incorrectAnswer = r.getIncorrectAnswers();*/
 
-            mDatabase.child("questions").push().setValue(r);
+            String questionKey = mDatabase.child("questions").push().getKey();
+            mDatabase.child("questions").child(questionKey).setValue(r);
+            keyList.add(questionKey);
         }
     }
     //endregion
@@ -298,13 +303,17 @@ public class Database {
     public LiveData<ActiveGame> getGameInfo(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName);
-        DatabaseReference questionRef = mDatabase.child("questions");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Iterable<DataSnapshot> results = snapshot.getChildren();
                 List<ActiveGame> resultList = new ArrayList<>();
+                if(snapshot.getValue() == null){
+                    return;
+                }
+                String gameName = snapshot.child("gameName").getValue().toString();
+                String questionKey = keyList.get(0);
 /*
                 String category = snapshot.child("category").getValue().toString();
                 int currentRound = snapshot.child("currentRound").getValue(int.class);
@@ -325,15 +334,14 @@ public class Database {
                     String type = r.child("type").getValue().toString();
 
                  */
-                String category = snapshot.child("category").getValue().toString();
-                String correctAnswer = snapshot.child("correctAnswer").getValue().toString();
-                String difficulty = snapshot.child("difficulty").getValue().toString();
-                //List<String> incorrectAnswers = r.getChildren();
-                String incorrectAnswer1 = snapshot.child("incorrectAnswers").child("0").getValue().toString();
-                String incorrectAnswer2 = snapshot.child("incorrectAnswers").child("1").getValue().toString();
-                String incorrectAnswer3 = snapshot.child("incorrectAnswers").child("2").getValue().toString();
-                String question = snapshot.child("question").getValue().toString();
-                String type = snapshot.child("type").getValue().toString();
+                //String category = snapshot.child("category").getValue().toString();
+                String correctAnswer = snapshot.child("questions").child(questionKey).child("correctAnswer").getValue().toString();
+                //String difficulty = snapshot.child("questions").child(questionKey).child("difficulty").getValue().toString();
+                String incorrectAnswer1 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("0").getValue().toString();
+                String incorrectAnswer2 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("1").getValue().toString();
+                String incorrectAnswer3 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("2").getValue().toString();
+                String question = snapshot.child("questions").child(questionKey).child("question").getValue().toString();
+                //String type = snapshot.child("type").child(questionKey).getValue().toString();
 
 
                 ActiveGame activeGame = new ActiveGame(correctAnswer,incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);

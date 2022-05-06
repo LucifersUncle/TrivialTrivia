@@ -50,11 +50,11 @@ public class ActiveGameActivity extends AppCompatActivity {
             @Override
             public void onChanged(ActiveGame activeGame) {
 
-               /* buttonAnswer1.setText(activeGame.getCorrectAnswer());
+                buttonAnswer1.setText(activeGame.getCorrectAnswer());
                 buttonAnswer2.setText(activeGame.getIncorrectAnswer1());
                 buttonAnswer3.setText(activeGame.getIncorrectAnswer2());
                 buttonAnswer4.setText(activeGame.getIncorrectAnswer3());
-                textViewAnswerQuestion.setText(activeGame.getQuestion());*/
+                textViewAnswerQuestion.setText(activeGame.getQuestion());
             }
         });
 //endregion
