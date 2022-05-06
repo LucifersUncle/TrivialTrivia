@@ -48,8 +48,8 @@ public class Database {
     private MutableLiveData<Boolean> gameStarted;
     private MutableLiveData<Question> aQuestion;
 
-    private List<String> keyList ;
-    private MutableLiveData<List<String>> listOfQuestionKeys;
+    //private List<String> keyList ;
+    private MutableLiveData<List<Question>> listOfQuestion;
 
     Context context;
     RequestQueue queue;
@@ -72,11 +72,9 @@ public class Database {
         listOfPlayers = new MutableLiveData<>();
         listOfPlayers.setValue(new ArrayList<>());
 
-        listOfQuestionKeys = new MutableLiveData<>();
+        listOfQuestion = new MutableLiveData<>();
 
-        //listOfQuestions;
         aQuestion = new MutableLiveData<>();
-        keyList = new ArrayList<>();
 
         player = new MutableLiveData<>();
         gameActive = new MutableLiveData<>();
@@ -286,84 +284,58 @@ public class Database {
 
             String questionKey = mDatabase.push().getKey();
             Question addedQuestion = new Question(questionKey, correctAnswer, incorrectAnswer.get(0), incorrectAnswer.get(1), incorrectAnswer.get(2), question);
-            mDatabase.child(questionKey).setValue(r);
-            keyList.add(questionKey);
-            listOfQuestionKeys.setValue(keyList);
-            mDatabase.setValue(addedQuestion);
+            //mDatabase.child(questionKey).setValue(r);
+            //keyList.add(questionKey);
+            //listOfQuestionKeys.setValue(keyList);
+            mDatabase.child(questionKey).setValue(addedQuestion);
         }
     }
     //endregion
     //endregion
 
 
-    public LiveData<Question> getGameInfo(String documentName){
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Lobbies").child(documentName);
-
-        //addQuestionKey(documentName);
-
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> results = snapshot.getChildren();
-                List<Question> resultList = new ArrayList<>();
-                if(snapshot.getValue() == null){
-                    return;
-                }
-                //String gameName = snapshot.child("gameName").getValue().toString();
-                String questionKey = keyList.get(0);
-                //List<String> questionKey = listOfQuestionKeys.getValue();
-
-
-                //String category = snapshot.child("category").getValue().toString();
-                String correctAnswer = snapshot.child("questions").child(questionKey).child("correctAnswer").getValue().toString();
-                //String difficulty = snapshot.child("questions").child(questionKey).child("difficulty").getValue().toString();
-                String incorrectAnswer1 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("0").getValue().toString();
-                String incorrectAnswer2 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("1").getValue().toString();
-                String incorrectAnswer3 = snapshot.child("questions").child(questionKey).child("incorrectAnswers").child("2").getValue().toString();
-                String question = snapshot.child("questions").child(questionKey).child("question").getValue().toString();
-                //String type = snapshot.child("type").child(questionKey).getValue().toString();
-
-
-                //indsæt id direkte her
-                Question q = new Question(questionKey,correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
-                    //resultList.add(activeGame);
-               // }
-            //listOfQuestions.setValue(resultList);
-                aQuestion.setValue(q);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        return aQuestion;
-    }
-
-    private void addQuestionKey(String documentName){
+    public LiveData<List<Question>> getGameInfo(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName).child("questions");
 
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> keys = snapshot.getChildren();
-                List<String> keyList = new ArrayList<>();
-
-                for(DataSnapshot key : keys){
-                    keyList.add(key.getKey());
+                if (snapshot.getValue() == null) {
+                    return;
                 }
-                listOfQuestionKeys.setValue(keyList);
-            }
 
+                Iterable<DataSnapshot> allQuestions = snapshot.getChildren();
+                List<Question> questionList = new ArrayList<>();
+
+                for (DataSnapshot q : allQuestions) {
+                    try {
+                        String questionId = q.getKey();
+                        String correctAnswer = q.child("correctAnswer").getValue().toString();
+                        String incorrectAnswer1 = q.child("incorrectAnswer1").getValue().toString();
+                        String incorrectAnswer2 = q.child("incorrectAnswer2").getValue().toString();
+                        String incorrectAnswer3 = q.child("incorrectAnswer3").getValue().toString();
+                        String question = q.child("question").getValue().toString();
+
+                        Question questionAsked = new Question(questionId, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
+                        questionList.add(questionAsked);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                }
+                listOfQuestion.setValue(questionList);
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
+        return listOfQuestion;
     }
+
+
 
     //region State Management
     public void setActiveState(boolean state, String documentID) {

@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Question;
 
@@ -19,7 +21,7 @@ public class ActiveGameViewModel extends AndroidViewModel {
 
 
 
-    public LiveData<Question> getGameInfo(String documentName){
+    public LiveData<List<Question>> getGameInfo(String documentName){
         return db.getGameInfo(documentName);
     }
 }

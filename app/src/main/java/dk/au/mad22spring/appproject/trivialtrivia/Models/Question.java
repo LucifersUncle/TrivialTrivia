@@ -12,6 +12,10 @@ public class Question {
     String question;
     String type;
 
+    public Question(){
+
+    }
+
     public Question(String questionID,
                     String correctAnswer,
                     String incorrectAnswer1,

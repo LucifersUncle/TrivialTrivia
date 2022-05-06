@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
+
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Question;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
@@ -45,19 +47,21 @@ public class ActiveGameActivity extends AppCompatActivity {
         documentName = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
 
         vm = new ViewModelProvider(this).get(ActiveGameViewModel.class);
-        //region virker ikke her
-        vm.getGameInfo(documentName).observe(this, new Observer<Question>() {
-            @Override
-            public void onChanged(Question question) {
 
-                buttonAnswer1.setText(question.getCorrectAnswer());
-                buttonAnswer2.setText(question.getIncorrectAnswer1());
-                buttonAnswer3.setText(question.getIncorrectAnswer2());
-                buttonAnswer4.setText(question.getIncorrectAnswer3());
-                textViewAnswerQuestion.setText(question.getQuestion());
+        vm.getGameInfo(documentName).observe(this, new Observer<List<Question>>() {
+            @Override
+            public void onChanged(List<Question> questions) {
+
+                buttonAnswer1.setText(questions.get(0).getCorrectAnswer());
+                buttonAnswer2.setText(questions.get(0).getIncorrectAnswer1());
+                buttonAnswer3.setText(questions.get(0).getIncorrectAnswer2());
+                buttonAnswer4.setText(questions.get(0).getIncorrectAnswer3());
+                textViewAnswerQuestion.setText(questions.get(0).getQuestion());
             }
         });
-        //endregion
+
+
+
 
 
 
