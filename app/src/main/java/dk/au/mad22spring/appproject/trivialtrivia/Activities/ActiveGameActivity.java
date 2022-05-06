@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
-import dk.au.mad22spring.appproject.trivialtrivia.Models.ActiveGame;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Question;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.ActiveGameViewModel;
 
@@ -22,7 +22,7 @@ public class ActiveGameActivity extends AppCompatActivity {
     TextView textViewScore, textViewAnswerQuestion;
     ProgressBar progressBarTime;
 
-    ActiveGame gameInfo;
+    Question gameInfo;
 
     ActiveGameViewModel vm;
 
@@ -45,19 +45,19 @@ public class ActiveGameActivity extends AppCompatActivity {
         documentName = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
 
         vm = new ViewModelProvider(this).get(ActiveGameViewModel.class);
-//region virker ikke her
-        vm.getGameInfo(documentName).observe(this, new Observer<ActiveGame>() {
+        //region virker ikke her
+        vm.getGameInfo(documentName).observe(this, new Observer<Question>() {
             @Override
-            public void onChanged(ActiveGame activeGame) {
+            public void onChanged(Question question) {
 
-                buttonAnswer1.setText(activeGame.getCorrectAnswer());
-                buttonAnswer2.setText(activeGame.getIncorrectAnswer1());
-                buttonAnswer3.setText(activeGame.getIncorrectAnswer2());
-                buttonAnswer4.setText(activeGame.getIncorrectAnswer3());
-                textViewAnswerQuestion.setText(activeGame.getQuestion());
+                buttonAnswer1.setText(question.getCorrectAnswer());
+                buttonAnswer2.setText(question.getIncorrectAnswer1());
+                buttonAnswer3.setText(question.getIncorrectAnswer2());
+                buttonAnswer4.setText(question.getIncorrectAnswer3());
+                textViewAnswerQuestion.setText(question.getQuestion());
             }
         });
-//endregion
+        //endregion
 
 
 

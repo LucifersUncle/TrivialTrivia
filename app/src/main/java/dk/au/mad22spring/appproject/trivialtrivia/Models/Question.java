@@ -1,7 +1,8 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Models;
 
-public class ActiveGame {
+public class Question {
 
+    String questionID;
     String category;
     String correctAnswer;
     String difficulty;
@@ -11,16 +12,26 @@ public class ActiveGame {
     String question;
     String type;
 
-    public ActiveGame(String correctAnswer,
-                      String incorrectAnswer1,
-                      String incorrectAnswer2,
-                      String incorrectAnswer3,
-                      String question){
-        this.correctAnswer=correctAnswer;
-        this.incorrectAnswer1=incorrectAnswer1;
-        this.incorrectAnswer2=incorrectAnswer2;
-        this.incorrectAnswer3=incorrectAnswer3;
-        this.question=question;
+    public Question(String questionID,
+                    String correctAnswer,
+                    String incorrectAnswer1,
+                    String incorrectAnswer2,
+                    String incorrectAnswer3,
+                    String question){
+        this.questionID = questionID;
+        this.correctAnswer = correctAnswer;
+        this.incorrectAnswer1 = incorrectAnswer1;
+        this.incorrectAnswer2 = incorrectAnswer2;
+        this.incorrectAnswer3 = incorrectAnswer3;
+        this.question = question;
+    }
+
+    public String getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(String questionID) {
+        this.questionID = questionID;
     }
 
     public String getCategory() {

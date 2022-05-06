@@ -2,12 +2,8 @@ package dk.au.mad22spring.appproject.trivialtrivia.Database;
 
 import android.app.Application;
 import android.content.Context;
-import android.mtp.MtpConstants;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,15 +12,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,12 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import dk.au.mad22spring.appproject.trivialtrivia.Models.ActiveGame;
+import dk.au.mad22spring.appproject.trivialtrivia.Models.Question;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Questions.QuestionData;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Questions.Result;
-import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 
 public class Database {
     private static Database instance;
@@ -54,7 +46,7 @@ public class Database {
 
     private MutableLiveData<Boolean> gameActive;
     private MutableLiveData<Boolean> gameStarted;
-    private MutableLiveData<ActiveGame> aQuestion;
+    private MutableLiveData<Question> aQuestion;
 
     private List<String> keyList ;
     private MutableLiveData<List<String>> listOfQuestionKeys;
@@ -279,32 +271,32 @@ public class Database {
         setQuestionsForGame(questionData, documentName);
     }
 
-    private  void setQuestionsForGame(QuestionData questionData, String documentName){
-
-        String lobbyID = documentName;
+    private void setQuestionsForGame(QuestionData questionData, String documentName){
 
         List<Result> results = questionData.getResults();
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Lobbies").child(lobbyID);
+                .getReference("Lobbies").child(documentName).child("questions");
 
-        for(Result r : results){
-            /*String category = r.getCategory();
+        for(Result r: results){
+            String category = r.getCategory();
             String difficulty = r.getDifficulty();
             String question = r.getQuestion();
             String correctAnswer = r.getCorrectAnswer();
-            List<String> incorrectAnswer = r.getIncorrectAnswers();*/
+            List<String> incorrectAnswer = r.getIncorrectAnswers();
 
-            String questionKey = mDatabase.child("questions").push().getKey();
-            mDatabase.child("questions").child(questionKey).setValue(r);
+            String questionKey = mDatabase.push().getKey();
+            Question addedQuestion = new Question(questionKey, correctAnswer, incorrectAnswer.get(0), incorrectAnswer.get(1), incorrectAnswer.get(2), question);
+            mDatabase.child(questionKey).setValue(r);
             keyList.add(questionKey);
             listOfQuestionKeys.setValue(keyList);
+            mDatabase.setValue(addedQuestion);
         }
     }
     //endregion
     //endregion
 
 
-    public LiveData<ActiveGame> getGameInfo(String documentName){
+    public LiveData<Question> getGameInfo(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName);
 
@@ -314,7 +306,7 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Iterable<DataSnapshot> results = snapshot.getChildren();
-                List<ActiveGame> resultList = new ArrayList<>();
+                List<Question> resultList = new ArrayList<>();
                 if(snapshot.getValue() == null){
                     return;
                 }
@@ -322,26 +314,7 @@ public class Database {
                 String questionKey = keyList.get(0);
                 //List<String> questionKey = listOfQuestionKeys.getValue();
 
-/*
-                String category = snapshot.child("category").getValue().toString();
-                int currentRound = snapshot.child("currentRound").getValue(int.class);
-                String difficulty = snapshot.child("difficulty").getValue().toString();
-                String documentName = snapshot.child("documentName").getValue().toString();
-                String gameName = snapshot.child("gameName").getValue().toString();
-                int numberOfRounds = snapshot.child("numberOfRounds").getValue(int.class);
-*/
-                /*for(DataSnapshot r : results){
-                    String category = r.child("category").getValue().toString();
-                    String correctAnswer = r.child("correctAnswer").getValue().toString();
-                    String difficulty = r.child("difficulty").getValue().toString();
-                    //List<String> incorrectAnswers = r.getChildren();
-                    String incorrectAnswer1 = r.child("incorrectAnswers").child("0").getValue().toString();
-                    String incorrectAnswer2 = r.child("incorrectAnswers").child("1").getValue().toString();
-                    String incorrectAnswer3 = r.child("incorrectAnswers").child("2").getValue().toString();
-                    String question = r.child("question").getValue().toString();
-                    String type = r.child("type").getValue().toString();
 
-                 */
                 //String category = snapshot.child("category").getValue().toString();
                 String correctAnswer = snapshot.child("questions").child(questionKey).child("correctAnswer").getValue().toString();
                 //String difficulty = snapshot.child("questions").child(questionKey).child("difficulty").getValue().toString();
@@ -352,11 +325,12 @@ public class Database {
                 //String type = snapshot.child("type").child(questionKey).getValue().toString();
 
 
-                ActiveGame activeGame = new ActiveGame(correctAnswer,incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
+                //indsæt id direkte her
+                Question q = new Question(questionKey,correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
                     //resultList.add(activeGame);
                // }
             //listOfQuestions.setValue(resultList);
-                aQuestion.setValue(activeGame);
+                aQuestion.setValue(q);
             }
 
             @Override

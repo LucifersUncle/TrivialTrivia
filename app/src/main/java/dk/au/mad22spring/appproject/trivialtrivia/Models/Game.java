@@ -6,24 +6,25 @@ import java.util.UUID;
 public class Game {
     private String gameName, category, difficulty;
     private String documentName;
+
     private int timePerRound, numberOfRounds, currentRound;
 
     private HashMap<String, Player> players;
 
     //game states
-    private boolean gameIsActive, gameIsStarted;
+    private boolean isActive, isStarted;
 
     public Game() {
         //empty constructor to access object methods
     }
 
-    public Game(String gameName, int timePerRound, int numberOfRounds, String hostName, String documentName, boolean gameIsActive, boolean gameIsStarted, String category, String difficulty) {
+    public Game(String gameName, int timePerRound, int numberOfRounds, String hostName, String documentName, boolean isActive, boolean isStarted, String category, String difficulty) {
         this.gameName = gameName;
         this.timePerRound = timePerRound;
         this.numberOfRounds = numberOfRounds;
         this.currentRound = 1;
-        this.gameIsActive = gameIsActive;
-        this.gameIsStarted = gameIsStarted;
+        this.isActive = isActive;
+        this.isStarted = isStarted;
         this.category = category;
         this.difficulty = difficulty;
         this.documentName = documentName;
@@ -78,18 +79,18 @@ public class Game {
         return difficulty;
     }
 
-    public boolean gameIsActive() {
-        return gameIsActive;
+    public boolean isActive() {
+        return isActive;
     }
-    public void setGameIsActive(boolean active) {
-        gameIsActive = active;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
-    public boolean gameIsStarted() {
-        return gameIsStarted;
+    public boolean isStarted() {
+        return isStarted;
     }
-    public void setGameIsStarted(boolean started) {
-        gameIsStarted = started;
+    public void setStarted(boolean started) {
+        isStarted = started;
     }
 
     public String getDocumentName() {
