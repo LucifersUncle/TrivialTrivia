@@ -114,7 +114,7 @@ public class Database {
                     String category = lobby.child("category").getValue().toString();
                     String difficulty = lobby.child("difficulty").getValue().toString();
 
-                    Game game = new Game(gameName, 10, 10, "guffestav", documentName, true, false, category, difficulty);
+                    Game game = new Game(gameName, 10, 10, "Tests", documentName, true, false, category, difficulty);
                     lobbiesList.add(game);
                 }
 
@@ -200,16 +200,19 @@ public class Database {
         return listOfPlayers;
     }
 
-    public void getQuestions(){
+    public void getQuestions(String documentName, int roundsPicked, String categoryPicked, String difficultyPicked){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentName);
+
+        String amount= roundsPicked+"";
+        String category = categoryPicked;
+        String difficulty = difficultyPicked;
 
         //https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple
         String baseURLstart = "https://opentdb.com/api.php?";
         String baseURLend = "&type=multiple";
-        int amount=10; //Skal være det fra GameSettings
         String amountURL = "amount="+amount;
-        String category = "9"; //Skal være det fra GameSettings
         String categoryURL = "&category="+category;
-        String difficulty = "easy"; //Skal være det fra GameSettings
         String difficultyURL = "&difficulty="+difficulty;
         String URL="";
 
@@ -228,7 +231,6 @@ public class Database {
         else{
         }
 
-
         if(queue==null){
             queue = Volley.newRequestQueue(context);
         }
@@ -236,7 +238,7 @@ public class Database {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 response -> {
                     Log.d("GUSTAV", "onResponse: " + response);
-                    parseJson(response);
+                    parseJson(response, documentName);
 
                 }, error -> {
             Log.e("Gustav", "That did not work!", error);
@@ -244,21 +246,20 @@ public class Database {
         queue.add(stringRequest);
     }
 
-    private void parseJson(String json){
+    private void parseJson(String json, String documentName){
         Gson gson = new GsonBuilder().create();
         QuestionData questionData = gson.fromJson(json, QuestionData.class);
 
-        setQuestionsForGame(questionData);
+        setQuestionsForGame(questionData, documentName);
     }
 
-    public void setQuestionsForGame(QuestionData questionData){
-        //Skal ikke være statisk, men have ID med
-        String lobbyID = "7dbd9bdc-5f05-4892-be71-9c2adb985083";
+    private  void setQuestionsForGame(QuestionData questionData, String documentName){
+
+        String lobbyID = documentName;
 
         List<Result> results = questionData.getResults();
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(lobbyID);
-
 
         for(Result r : results){
             String category = r.getCategory();

@@ -20,5 +20,9 @@ public class GameSettingsViewModel extends AndroidViewModel {
         return db.addGame(gameName, timePerRound, numberOfRounds, playerName, category, difficulty);
     }
 
+    public void getQuestions(String documentName, int roundsPicked, String category, String difficulty){
+        db.getQuestions(documentName, roundsPicked, category, difficulty);
+    }
+
 
 }

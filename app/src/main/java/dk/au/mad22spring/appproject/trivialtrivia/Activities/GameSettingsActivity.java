@@ -112,11 +112,13 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
                 String difficulty = difficultySelected;
 
 
+
                 if (game.isEmpty()) {
                     gameName.setError("Game name cannot be empty!");
                     gameName.requestFocus();
                 } else {
                     String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, "test", category, difficulty);
+                    vm.getQuestions(documentName, roundsPicked, category, difficulty);
 
                     Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
                     intent.putExtra(Constants.PLAYER_OBJ, "host");
