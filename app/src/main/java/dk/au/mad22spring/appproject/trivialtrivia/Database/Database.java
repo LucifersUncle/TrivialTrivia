@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -50,7 +51,7 @@ public class Database {
     private MutableLiveData<Player> player;
     private MutableLiveData<Integer> currentRound;
 
-    private MutableLiveData<Boolean> gameState;
+    private MutableLiveData<Boolean> gameActive;
     private MutableLiveData<Boolean> gameStarted;
 
     Context context;
@@ -75,7 +76,7 @@ public class Database {
         listOfPlayers.setValue(new ArrayList<>());
 
         player = new MutableLiveData<>();
-        gameState = new MutableLiveData<>();
+        gameActive = new MutableLiveData<>();
         gameStarted = new MutableLiveData<>();
         context = application.getApplicationContext();
     }
@@ -90,11 +91,6 @@ public class Database {
         mDatabase.child(documentName).setValue(game);
 
         return documentName;
-    }
-
-    public void removeGame(String documentName) {
-        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentName);
-        mDatabase.removeValue();
     }
 
     public LiveData<List<Game>> getGames(){
@@ -113,6 +109,8 @@ public class Database {
                     String gameName = lobby.child("gameName").getValue().toString();
                     String category = lobby.child("category").getValue().toString();
                     String difficulty = lobby.child("difficulty").getValue().toString();
+                    //int numberOfRounds = Integer.parseInt(lobby.child("numberOfRounds").getValue().toString()); //should be added
+                    //int timePerRound = Integer.parseInt(lobby.child("timePerRound").getValue().toString()); //should be added
 
                     Game game = new Game(gameName, 10, 10, "Tests", documentName, true, false, category, difficulty);
                     lobbiesList.add(game);
@@ -130,6 +128,11 @@ public class Database {
         return listOfGames;
     }
 
+    public void removeGame(String documentName) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentName);
+        mDatabase.removeValue();
+    }
+
     public void addPlayerToLobby(String playerName, String documentName) {
         String uniqueId = UUID.randomUUID().toString();
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -142,34 +145,6 @@ public class Database {
 
         mDatabase.setValue(player);
     }
-
-    //region Funktion - Dette skal være den som sætter playerName - OBS: Virker ikke
-    public void getPlayerName(Player playerObj) {
-        user = mAuth.getCurrentUser();
-
-        if (user != null) {
-            String userId = user.getUid();
-
-            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
-                    .getReference("Users").child(userId);
-
-            Query usernameQuery = mDatabase.orderByChild("username");
-
-            usernameQuery.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String name = snapshot.child("username").getValue().toString();
-                    //player2.setPlayerName(name); //har fjernet player2 initialiseringen
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-    }
-    //endregion
 
     public LiveData<List<Player>> getPlayersInLobby(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -273,4 +248,98 @@ public class Database {
     }
 
 
+    //region State Management
+    public void removePlayer(String playerName, String documentID) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentID).child("players");
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> allPlayers = snapshot.getChildren();
+
+                for (DataSnapshot player : allPlayers) {
+                    try {
+                        String playerNameFound = player.child("playerName").getValue().toString();
+                        String playerDocument = player.getKey();
+
+                        if (playerName.equals(playerNameFound)) {
+                            mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                                    .getReference("Lobbies")
+                                    .child(documentID)
+                                    .child("players")
+                                    .child(playerDocument);
+                            mDatabase.removeValue();
+                        }
+                    } catch (Exception e) {
+                        Log.d("Database", "onDataChange: Something went wrong when removing player!");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void setActiveState(boolean state, String documentID) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies")
+                .child(documentID)
+                .child("active");
+        mDatabase.setValue(state);
+    }
+
+    public LiveData<Boolean> getActiveState(String documentID) {
+        gameActive.setValue(true);
+
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentID).child("active");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null)
+                    return;
+                Boolean activeState = Boolean.parseBoolean(snapshot.getValue().toString());
+                gameActive.setValue(activeState);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("Database", "onCancelled: Something went wrong in getting the Active State of the game!");
+            }
+        });
+        return gameActive;
+    }
+
+    public void setStartedState(boolean state, String documentID) {
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentID).child("started");
+        mDatabase.setValue(state);
+    }
+
+    public LiveData<Boolean> getStartedState(String documentID) {
+        gameStarted.setValue(false);
+
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies").child(documentID).child("started");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null)
+                    return;
+
+                Boolean state = Boolean.parseBoolean(snapshot.getValue().toString());
+                gameStarted.setValue(state);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("Database", "onCancelled: Something went wrong getting the Gane Started state!");
+            }
+        });
+        return gameStarted;
+    }
+    //endregion
 }

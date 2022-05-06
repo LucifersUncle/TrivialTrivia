@@ -30,10 +30,4 @@ public class JoinGameViewModel extends AndroidViewModel {
     public void addPlayerToLobby(String playerName, String documentName){
         db.addPlayerToLobby(playerName, documentName);
     }
-
-    public void getPlayerName(Player playerObj){
-        db.getPlayerName(playerObj);
-    }
-
-
 }

@@ -64,13 +64,6 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame = (Button) findViewById(R.id.btn_lobby_startGame);
         buttonStartGame.setOnClickListener(this);
 
-        // Get data from DB
-        /*
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users");
-        userID = user.getUid();
-
-         */
 
         //setup for recyclerview with adapter and layout manager
         adapter = new LobbyAdapter();

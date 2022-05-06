@@ -24,4 +24,30 @@ public class LobbyViewModel extends AndroidViewModel {
         return db.getPlayersInLobby(documentName);
     }
 
+    public void removePlayer(String playerName, String documentID) {
+        db.removePlayer(playerName, documentID);
+    }
+
+    public void removeGame(String documentID) {
+        db.removeGame(documentID);
+    }
+
+    public void setActiveState(boolean state, String documentID) {
+        db.setActiveState(state, documentID);
+    }
+
+    public LiveData<Boolean> getActiveState(String documentID) {
+        return db.getActiveState(documentID);
+    }
+
+    public void setStartedState(boolean state, String documentID) {
+        db.setStartedState(state, documentID);
+    }
+
+    public LiveData<Boolean> getStartedState(String documentID) {
+        return db.getStartedState(documentID);
+    }
+
+
+
 }
