@@ -219,7 +219,7 @@ public class Database {
     //endregion
 
     //region Questions
-    public void getQuestions(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
+    public void fetchQuestions(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentId);
 
@@ -292,7 +292,7 @@ public class Database {
     }
 
 
-    public LiveData<List<Question>> getQuestions (String documentName){
+    public LiveData<List<Question>> fetchQuestions(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName).child("questions");
 

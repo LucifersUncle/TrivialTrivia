@@ -77,7 +77,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
                     intent.putExtra(Constants.CATEGORY_OBJ, category);
                     intent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
                     intent.putExtra(Constants.DOC_OBJ, documentName);
-                    intent.putExtra(Constants.PLAYER_NAME, playerName);
+                    //intent.putExtra(Constants.PLAYER_NAME, playerName);
 
                     launcher.launch(intent);
                 }
@@ -227,7 +227,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
                 if (result.getResultCode() == RESULT_CANCELED) {
-                    //finish();
+                    finish();
                 }
             }
         }

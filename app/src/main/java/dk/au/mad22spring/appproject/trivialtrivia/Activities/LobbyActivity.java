@@ -54,7 +54,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
-                    //finish();
+                    finish();
                 }
             }
         });
@@ -62,7 +62,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         playerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == RESULT_CANCELED) {
+                if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
                     finish();
                 }
             }
@@ -106,15 +106,15 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onChanged(Boolean active) {
                 if (!active) {
-                    Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
-                    //intent.putExtra(Constants.)
-                    playerLauncher.launch(intent);
                     /*
+                    Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
+                    playerLauncher.launch(intent);
+                    */
                     if (playerObj.equals("player"))
                         Toast.makeText(LobbyActivity.this, "Error in getting activeState", Toast.LENGTH_SHORT).show();
                         finish();
 
-                     */
+
                 }
             }
         });
@@ -123,22 +123,22 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onChanged(Boolean started) {
                 if (started)
-                    //if (playerObj.equals("player") && !gameStartedForPlayer) {
-
-                        gameStartedForPlayer = true;
+                    if (playerObj.equals("player") && gameStartedForPlayer) {
+                        //gameStartedForPlayer = true; //Has been moved
                         Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
-                        /*
+
+
                         intent.putExtra(Constants.GAME_OBJ, documentId);
                         intent.putExtra(Constants.PLAYER_OBJ, "player");
                         intent.putExtra(Constants.PLAYER_NAME, playerName);
 
                         //Player playerToSend = validatePlayer(playerName);
-                        intent.putExtra(Constants.PLAYER_REF, playerRef);
+                        //intent.putExtra(Constants.PLAYER_REF, playerRef);
 
-                         */
+
 
                         playerLauncher.launch(intent);
-                    //}
+                    }
             }
         });
 
@@ -179,17 +179,17 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 vm.setStartedState(true, documentId); //host has started the game and therefore state changes
 
                 Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
-                /*
+
                 intent.putExtra(Constants.DOC_OBJ, documentId);
+
                 intent.putExtra(Constants.PLAYER_NAME, playerName);
                 intent.putExtra(Constants.PLAYER_OBJ, "host");
-
+                /*
                 //Player playerToSend = validatePlayer(playerName);
                 intent.putExtra(Constants.PLAYER_REF, playerRef);
                 */
+                gameStartedForPlayer = true;
                 hostLauncher.launch(intent);
-
-
                 break;
             case R.id.button_lobby_leave:
                 finish();
@@ -199,7 +199,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    /*
+
     private Player validatePlayer(String name) {
         Player player = new Player();
         for (Player p : playersList) {
@@ -212,8 +212,6 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         }
         return player;
     }
-
-     */
 
     /*
     ActivityResultLauncher<Intent> hostLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
