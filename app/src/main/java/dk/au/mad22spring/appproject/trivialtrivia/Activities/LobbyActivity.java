@@ -180,10 +180,8 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 intent.putExtra(Constants.PLAYER_NAME, playerName);
                 intent.putExtra(Constants.PLAYER_OBJ, "host");
 
-                /*
                 Player playerToSend = validatePlayer(playerName);
                 intent.putExtra(Constants.PLAYER_REF, playerToSend);
-                 */
 
                 gameStartedForPlayer = true;
                 hostLauncher.launch(intent);
@@ -201,9 +199,9 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         for (Player p : playerList) {
             if (p.getPlayerName().equals(name)) {
                 player.setPlayerName(name);
-                player.setPlayerRef(player.getPlayerRef());
-                player.setScore(player.getScore());
-                player.setRole(player.getRole());
+                player.setPlayerRef(p.getPlayerRef());
+                player.setScore(p.getScore());
+                player.setRole(p.getRole());
             }
         }
         return player;
