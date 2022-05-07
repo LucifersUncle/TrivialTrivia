@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,13 +81,14 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         });
 
 
-        /*
+        
         vm.getActiveState(documentId).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean active) {
                 if (!active) {
                     if (player.equals("player"))
-                        finish();
+                        Toast.makeText(LobbyActivity.this, "Error in getting activeState", Toast.LENGTH_SHORT).show();
+                        //finish();
                 }
             }
         });
@@ -110,7 +112,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
-         */
+        
 
         if (playersList == null) {
             playersList = new ArrayList<>();

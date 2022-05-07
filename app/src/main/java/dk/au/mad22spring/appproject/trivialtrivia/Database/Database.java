@@ -288,9 +288,6 @@ public class Database {
 
             String questionKey = mDatabase.push().getKey();
             Question addedQuestion = new Question(questionKey, correctAnswer, incorrectAnswer.get(0), incorrectAnswer.get(1), incorrectAnswer.get(2), question);
-            //mDatabase.child(questionKey).setValue(r);
-            //keyList.add(questionKey);
-            //listOfQuestionKeys.setValue(keyList);
             mDatabase.child(questionKey).setValue(addedQuestion);
         }
     }
@@ -524,7 +521,7 @@ public class Database {
                     return;
                 }
 
-                String playerName = snapshot.child(documentId).child("playerName").getValue().toString();
+                String playerName = snapshot.child("playerName").getValue().toString();
                 int score = Integer.parseInt(snapshot.child("score").getValue().toString());
                 String role = snapshot.child("role").getValue().toString();
 
