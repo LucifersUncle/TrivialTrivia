@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
@@ -69,15 +67,18 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
                     gameName.requestFocus();
                 } else {
                     String documentName = vm.addGameToDb(game, timePickedPerRound, roundsPicked, playerName, category, difficulty);
-                    vm.getQuestions(documentName, roundsPicked, category, difficulty);
+                    vm.fetchQuestions(documentName, roundsPicked, category, difficulty); //rename function to something more appropriate
+                    vm.addHostToLobby(playerName, documentName);
 
                     Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+
                     intent.putExtra(Constants.PLAYER_OBJ, "host");
                     intent.putExtra(Constants.GAME_OBJ, game);
                     intent.putExtra(Constants.CATEGORY_OBJ, category);
                     intent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
                     intent.putExtra(Constants.DOC_OBJ, documentName);
                     intent.putExtra(Constants.PLAYER_NAME, playerName);
+
                     launcher.launch(intent);
                 }
 
@@ -226,7 +227,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
                 if (result.getResultCode() == RESULT_CANCELED) {
-                    finish();
+                    //finish();
                 }
             }
         }

@@ -1,5 +1,9 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
@@ -26,6 +31,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
+    private String playerName;
 
     private Button buttonLogOut, buttonCreateGame, buttonJoinGame;
 
@@ -62,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     String username = userProfile.username;
 
                     greeting.setText("Welcome, " + username + "!");
+                    playerName = username;
                 }
             }
 
@@ -76,7 +83,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonCreateGame:
-                startActivity(new Intent(HomeActivity.this, GameSettingsActivity.class));
+                Intent intent = new Intent(getApplicationContext(),GameSettingsActivity.class);
+                intent.putExtra(Constants.PLAYER_NAME, playerName); //playerName of Host
+                launcher.launch(intent);
                 break;
 
             case R.id.buttonLogOut:
@@ -85,8 +94,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.buttonJoinGame:
+                Intent i = new Intent(getApplicationContext(), JoinGameActivity.class);
+                //i.putExtra(Constants.PLAYER_NAME, playerName); //recently added for test purposes
                 startActivity(new Intent(HomeActivity.this, JoinGameActivity.class));
                 break;
         }
     }
+
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+
+        }
+    });
 }

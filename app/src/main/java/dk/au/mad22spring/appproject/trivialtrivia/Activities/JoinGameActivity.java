@@ -1,5 +1,7 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -47,17 +49,30 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     private ArrayList<User> users;
 
     private String playerName;
+    private String playerRef; //recently added for test purposed
 
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
 
     private Player playerObj = new Player();
+    ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
+
+
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+
+            }
+        });
+        
+
+        playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
 
         // Get User Data from DB
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,19 +132,14 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
 
         vm.addPlayerToLobby(playerName, documentName); //Outcommented to show that we can go to LobbyActivity
 
-        Intent i = new Intent(getApplicationContext(), LobbyActivity.class);
-        i.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
-        i.putExtra(Constants.LOBBY_INDEX, index);
-        i.putExtra(Constants.DOC_OBJ, documentName);
-        i.putExtra(Constants.GAME_OBJ, gameName);
-        i.putExtra(Constants.PLAYER_OBJ, "player");
-        launcher.launch(i);
+        Intent intent = new Intent(getApplicationContext(), LobbyActivity.class);
+        intent.putExtra(Constants.PLAYER_NAME, playerName); //kan være at den skal med
+        intent.putExtra(Constants.LOBBY_INDEX, index);
+        intent.putExtra(Constants.DOC_OBJ, documentName);
+        intent.putExtra(Constants.GAME_OBJ, gameName);
+        intent.putExtra(Constants.PLAYER_OBJ, "player");
+        intent.putExtra(Constants.PLAYER_REF, playerRef);
+        launcher.launch(intent);
+        //startActivity(intent);
     }
-
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),   //default contract
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                }
-            });
 }

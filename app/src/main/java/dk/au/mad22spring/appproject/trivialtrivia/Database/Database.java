@@ -37,20 +37,17 @@ public class Database {
     private static Database instance;
     private DatabaseReference mDatabase;
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser user;
-
     private MutableLiveData<List<Game>> gamesList;
     private MutableLiveData<List<Player>> playerList;
+    private MutableLiveData<List<Question>> questionList;
+
     private MutableLiveData<Player> playerObj;
-    private MutableLiveData<Integer> currentRound;
+    private MutableLiveData<Question> questionObj;
     private MutableLiveData<ActiveGame> activeGameObj;
 
+    private MutableLiveData<Integer> currentRound;
     private MutableLiveData<Boolean> isActive;
     private MutableLiveData<Boolean> isStarted;
-    private MutableLiveData<Question> questionObj;
-
-    private MutableLiveData<List<Question>> questionList;
 
     Context context;
     RequestQueue queue;
@@ -92,7 +89,7 @@ public class Database {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies");
 
-        ValueEventListener gameListener = new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Iterable<DataSnapshot> lobbies = snapshot.getChildren();
@@ -118,8 +115,7 @@ public class Database {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("TAG", "onCancelled: Something went wrong here :(");
             }
-        };
-        mDatabase.addValueEventListener(gameListener);
+        });
         return gamesList;
     }
 
@@ -149,18 +145,21 @@ public class Database {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 Iterable<DataSnapshot> players = snapshot.getChildren();
                 List<Player> playersList = new ArrayList<>();
 
                 for(DataSnapshot p : players){
-                    String playerDocument = p.child("documentName").toString();
-                    String playerName = p.child("playerName").getValue().toString();
-                    String playerRole = p.child("role").getValue().toString();
-                    int playerScore = Integer.parseInt(p.child("score").getValue().toString());
+                    try {
+                        String playerRef = p.getKey();
+                        String playerName = p.child("playerName").getValue().toString();
+                        String playerRole = p.child("role").getValue().toString();
+                        int playerScore = Integer.parseInt(p.child("score").getValue().toString());
 
-                    Player player = new Player(playerName, documentId,playerRole,playerScore); //Overvej at bruge playerDocument i stedet for documentName
-                    playersList.add(player);
+                        Player player = new Player(playerName, playerRole, playerRef,playerScore); //Overvej at bruge playerDocument i stedet for documentName
+                        playersList.add(player);
+                    } catch (Exception e) {
+                        Log.d("Database", "getPlayersInLobby: Something went wrong!");
+                    }
                 }
                 playerList.setValue(playersList);
             }
@@ -291,8 +290,6 @@ public class Database {
             mDatabase.child(questionKey).setValue(addedQuestion);
         }
     }
-    //endregion
-    //endregion
 
 
     public LiveData<List<Question>> getQuestions (String documentName){
@@ -335,6 +332,18 @@ public class Database {
         });
         return questionList;
     }
+    //endregion
+    //endregion
+
+
+
+
+
+
+
+
+
+
 
     //region State Management
     public void setActiveState(boolean state, String documentId) {
@@ -344,6 +353,7 @@ public class Database {
                 .child("active");
         mDatabase.setValue(state);
     }
+
 
     public LiveData<Boolean> getActiveState(String documentId) {
         isActive.setValue(true);
@@ -397,6 +407,18 @@ public class Database {
     }
 
     //endregion
+
+
+
+
+
+
+
+
+
+
+
+
 
     //region Active Game Player Attributes
     public void setPlayerScore(String documentId, String playerReference, int currentScore) {
@@ -485,7 +507,7 @@ public class Database {
 
                 for (DataSnapshot p : allPlayers) {
                     try {
-                        String playerRef = p.getKey();
+                        String playerRef = p.child("playerRef").getValue().toString(); //might need changing
                         String playerName = p.child("playerName").getValue().toString();
                         String role = p.child("role").getValue().toString();
                         int score = Integer.parseInt(p.child("score").getValue().toString());

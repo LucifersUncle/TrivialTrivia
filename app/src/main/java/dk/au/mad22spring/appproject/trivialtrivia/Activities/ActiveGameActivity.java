@@ -33,7 +33,7 @@ public class ActiveGameActivity extends AppCompatActivity {
 
     private Question question;
     private ActiveGameViewModel vm;
-    private Player player;
+    private Player playerData;
     private ActiveGame activeGame;
     private List<Player> playerList;
 
@@ -55,7 +55,7 @@ public class ActiveGameActivity extends AppCompatActivity {
 
         documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
         whoIsCalling = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
-        player = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF);
+        playerData = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF);
 
         buttonLeave = findViewById(R.id.buttonLeaveActiveGame);
         buttonLeave.setOnClickListener(new View.OnClickListener() {
@@ -97,27 +97,15 @@ public class ActiveGameActivity extends AppCompatActivity {
             }
         });
 
-        vm.getPlayer(documentId, player.getPlayerRef()).observe(this, new Observer<Player>() {
+        vm.getPlayer(documentId, playerData.getPlayerRef()).observe(this, new Observer<Player>() {
             @Override
             public void onChanged(Player playerToGet) {
-                if (player == null) {
+                if (playerData == null) {
                     return;
                 }
-                player = playerToGet;
+                playerData = playerToGet;
             }
         });
-
-        /*
-        vm.getQuestions(documentId).observe(this, new Observer<List<Question>>() {
-            @Override
-            public void onChanged(List<Question> questions) {
-
-            }
-        });
-
-         */
-
-
 
         /*
         vm.getCurrentQuestion(documentId).observe(this, new Observer<Question>() {
@@ -154,22 +142,12 @@ public class ActiveGameActivity extends AppCompatActivity {
         vm.getQuestions(documentId).observe(this, new Observer<List<Question>>() {
             @Override
             public void onChanged(List<Question> questions) {
-
-
                 buttonAnswer1.setText(questions.get(0).getCorrectAnswer());
                 buttonAnswer2.setText(questions.get(0).getIncorrectAnswer1());
                 buttonAnswer3.setText(questions.get(0).getIncorrectAnswer2());
                 buttonAnswer4.setText(questions.get(0).getIncorrectAnswer3());
                 textViewAnswerQuestion.setText(questions.get(0).getQuestion());
-
-
             }
         });
-
-
-
-
-
-
     }
 }
