@@ -139,7 +139,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         intent.putExtra(Constants.GAME_OBJ, gameName);
         intent.putExtra(Constants.PLAYER_OBJ, "player");
         intent.putExtra(Constants.PLAYER_REF, playerRef);
-        launcher.launch(intent);
-        //startActivity(intent);
+        //launcher.launch(intent);
+        startActivity(intent);
     }
 }

@@ -33,7 +33,7 @@ public class ActiveGameActivity extends AppCompatActivity {
 
     private Question question;
     private ActiveGameViewModel vm;
-    private Player playerData;
+    private Player playerReference;
     private ActiveGame activeGame;
     private List<Player> playerList;
 
@@ -55,7 +55,7 @@ public class ActiveGameActivity extends AppCompatActivity {
 
         documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
         whoIsCalling = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
-        playerData = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF);
+        playerReference = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF); //wrong playerObject is sent with this one
 
         buttonLeave = findViewById(R.id.buttonLeaveActiveGame);
         buttonLeave.setOnClickListener(new View.OnClickListener() {
@@ -97,13 +97,13 @@ public class ActiveGameActivity extends AppCompatActivity {
             }
         });
 
-        vm.getPlayer(documentId, playerData.getPlayerRef()).observe(this, new Observer<Player>() {
+        vm.getPlayer(documentId, playerReference.getPlayerRef()).observe(this, new Observer<Player>() {
             @Override
             public void onChanged(Player playerToGet) {
-                if (playerData == null) {
+                if (playerReference == null) {
                     return;
                 }
-                playerData = playerToGet;
+                playerReference = playerToGet;
             }
         });
 

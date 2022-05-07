@@ -27,7 +27,7 @@ public class ActiveGameViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Question>> getQuestions(String documentId){
-        return db.fetchQuestions(documentId);
+        return db.fetchQuestionsFromAPI(documentId);
     }
 
     public LiveData<Question> getCurrentQuestion(String documentId) {

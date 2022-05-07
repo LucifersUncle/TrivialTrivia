@@ -219,7 +219,7 @@ public class Database {
     //endregion
 
     //region Questions
-    public void fetchQuestions(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
+    public void fetchQuestionsFromAPI(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentId);
 
@@ -292,7 +292,8 @@ public class Database {
     }
 
 
-    public LiveData<List<Question>> fetchQuestions(String documentName){
+
+    public LiveData<List<Question>> fetchQuestionsFromAPI(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName).child("questions");
 
@@ -472,7 +473,7 @@ public class Database {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot == null) {
+                if (snapshot.getValue() == null) {
                     return;
                 }
 
@@ -535,7 +536,7 @@ public class Database {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies")
                 .child(documentId)
-                .child("players");
+                .child("players").child(playerReference);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

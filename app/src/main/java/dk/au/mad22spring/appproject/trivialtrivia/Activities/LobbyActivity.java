@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Adapters.LobbyAdapter;
@@ -31,7 +32,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
     private String documentId;
     private String playerName;
     private String playerRef;
-    private List<Player> playersList;
+    private List<Player> playerList;
 
     private boolean gameStartedForPlayer = false;
 
@@ -75,7 +76,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
         playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
         documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
-        //playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
+        playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
 
         //region Buttons
         buttonStartGame = (Button) findViewById(R.id.btn_lobby_startGame);
@@ -96,8 +97,8 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         vm.getPlayersInLobby(documentId).observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(List<Player> players) {
-                playersList = players;
-                adapter.updateUserList(playersList); //playerlist is null here
+                playerList = players;
+                adapter.updateUserList(playerList);
             }
         });
 
@@ -106,15 +107,9 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onChanged(Boolean active) {
                 if (!active) {
-                    /*
-                    Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
-                    playerLauncher.launch(intent);
-                    */
                     if (playerObj.equals("player"))
                         Toast.makeText(LobbyActivity.this, "Error in getting activeState", Toast.LENGTH_SHORT).show();
-                        finish();
-
-
+                        //finish(); //may not be needed
                 }
             }
         });
@@ -123,27 +118,27 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onChanged(Boolean started) {
                 if (started)
-                    if (playerObj.equals("player") && gameStartedForPlayer) {
+                    if (playerObj.equals("player") && !gameStartedForPlayer) { //maybe has to be when gameStartedForPlayers is "true"
                         //gameStartedForPlayer = true; //Has been moved
                         Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
-
 
                         intent.putExtra(Constants.GAME_OBJ, documentId);
                         intent.putExtra(Constants.PLAYER_OBJ, "player");
                         intent.putExtra(Constants.PLAYER_NAME, playerName);
 
-                        //Player playerToSend = validatePlayer(playerName);
-                        //intent.putExtra(Constants.PLAYER_REF, playerRef);
-
-
+                        Player playerToSend = validatePlayer(playerName);
+                        intent.putExtra(Constants.PLAYER_REF, (Serializable) playerToSend);
 
                         playerLauncher.launch(intent);
                     }
             }
         });
 
+        if (playerList == null)
+            playerList = new ArrayList<>();
+
         //updates the Recycler View with lists of Players
-        adapter.updateUserList(playersList);
+        adapter.updateUserList(playerList);
 
         if (playerObj.equals("host")){
             buttonStartGame.setVisibility(View.VISIBLE);
@@ -184,10 +179,12 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
 
                 intent.putExtra(Constants.PLAYER_NAME, playerName);
                 intent.putExtra(Constants.PLAYER_OBJ, "host");
+
                 /*
-                //Player playerToSend = validatePlayer(playerName);
-                intent.putExtra(Constants.PLAYER_REF, playerRef);
-                */
+                Player playerToSend = validatePlayer(playerName);
+                intent.putExtra(Constants.PLAYER_REF, playerToSend);
+                 */
+
                 gameStartedForPlayer = true;
                 hostLauncher.launch(intent);
                 break;
@@ -195,14 +192,13 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 finish();
 
         }
-
-
     }
+
 
 
     private Player validatePlayer(String name) {
         Player player = new Player();
-        for (Player p : playersList) {
+        for (Player p : playerList) {
             if (p.getPlayerName().equals(name)) {
                 player.setPlayerName(name);
                 player.setPlayerRef(player.getPlayerRef());
@@ -212,28 +208,4 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         }
         return player;
     }
-
-    /*
-    ActivityResultLauncher<Intent> hostLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
-                finish();
-            }
-        }
-    });
-
-     */
-
-    /*
-    ActivityResultLauncher<Intent> playerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == Constants.LOBBY_ACTIVITY) {
-                finish();
-            }
-        }
-    });
-
-     */
 }
