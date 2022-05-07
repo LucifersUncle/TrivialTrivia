@@ -1,6 +1,7 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import dk.au.mad22spring.appproject.trivialtrivia.R;
+import dk.au.mad22spring.appproject.trivialtrivia.Services.QuizService;
 
 //https://firebase.google.com/docs/auth/android/start
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -69,7 +71,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //endregion
 
         //endregion
+
     }
+
+
 
     @Override
     protected void onStart() {

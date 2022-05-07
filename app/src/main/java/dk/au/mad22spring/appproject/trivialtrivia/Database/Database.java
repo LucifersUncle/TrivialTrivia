@@ -38,6 +38,7 @@ public class Database {
     private DatabaseReference mDatabase;
 
     private MutableLiveData<List<Game>> gamesList;
+    private  MutableLiveData<List<Game>> activeGamesList;
     private MutableLiveData<List<Player>> playerList;
     private MutableLiveData<List<Question>> questionList;
 
@@ -67,6 +68,9 @@ public class Database {
         //mDatabase = FirebaseDatabase.getInstance();
         gamesList = new MutableLiveData<>();
         gamesList.setValue(new ArrayList<>());
+
+        activeGamesList = new MutableLiveData<>();
+        activeGamesList.setValue(new ArrayList<>());
 
         playerList = new MutableLiveData<>();
         playerList.setValue(new ArrayList<>());
@@ -134,6 +138,39 @@ public class Database {
     public void removeGame(String documentName) {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Lobbies").child(documentName);
         mDatabase.removeValue();
+    }
+
+    public MutableLiveData<List<Game>> getActiveGames(){
+        mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference("Lobbies");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> lobbies = snapshot.getChildren();
+
+                List<Game> lobbiesList = new ArrayList<Game>();
+
+                for(DataSnapshot lobby : lobbies){
+                    boolean gameIsActive = (boolean) snapshot.child("active").getValue();
+                    if(gameIsActive){
+                        String documentName = lobby.getKey();
+                        String gameName = lobby.child("gameName").getValue().toString();
+                        String category = lobby.child("category").getValue().toString();
+                        String difficulty = lobby.child("difficulty").getValue().toString();
+
+                        Game game = new Game(gameName, 10, 10, "Tests", documentName, true, false, category, difficulty);
+                        lobbiesList.add(game);
+                    }
+                }
+                activeGamesList.setValue(lobbiesList);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("TAG", "onCancelled: Something went wrong here :(");
+            }
+        });
+        return activeGamesList;
     }
     //endregion
 

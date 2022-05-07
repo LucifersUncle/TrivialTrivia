@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
+import dk.au.mad22spring.appproject.trivialtrivia.Services.QuizService;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -77,6 +79,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(HomeActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
         });
+
+        startForegroundService(getApplication());
+    }
+
+    //To start foreground service
+    private void startForegroundService(Application application) {
+        Intent foregroundServiceIntent = new Intent(application, QuizService.class);
+        startService(foregroundServiceIntent);
     }
 
     @Override
@@ -100,6 +110,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override

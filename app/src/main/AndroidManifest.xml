@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dk.au.mad22spring.appproject.trivialtrivia">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -45,6 +49,10 @@
         <activity
             android:name=".Activities.InviteActivity"
             android:exported="false" />
+        <service
+            android:name=".Services.QuizService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

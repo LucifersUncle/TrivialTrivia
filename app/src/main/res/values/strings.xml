@@ -43,5 +43,9 @@
     <string name="btn_leave">Leave</string>
     <string name="buttonLeaveActiveGave">Leave</string>
     <string name="textScoreActiveGame">Score</string>
+    <string name="activeQuiz">A new quiz is happening!</string>
+
+
+
 
 </resources>
