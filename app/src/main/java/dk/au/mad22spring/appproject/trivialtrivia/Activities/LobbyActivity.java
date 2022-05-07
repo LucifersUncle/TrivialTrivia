@@ -75,7 +75,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         playerObj = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
 
         playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
-        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
+        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ); //here it gets set to documentId as expected
         playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
 
         //region Buttons
@@ -119,10 +119,10 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
             public void onChanged(Boolean started) {
                 if (started)
                     if (playerObj.equals("player") && !gameStartedForPlayer) { //maybe has to be when gameStartedForPlayers is "true"
-                        //gameStartedForPlayer = true; //Has been moved
+                        gameStartedForPlayer = true; //Has been moved
                         Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
 
-                        intent.putExtra(Constants.GAME_OBJ, documentId);
+                        intent.putExtra(Constants.DOC_OBJ, documentId); //check for null with the player
                         intent.putExtra(Constants.PLAYER_OBJ, "player");
                         intent.putExtra(Constants.PLAYER_NAME, playerName);
 
@@ -183,7 +183,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 Player playerToSend = validatePlayer(playerName);
                 intent.putExtra(Constants.PLAYER_REF, playerToSend);
 
-                gameStartedForPlayer = true;
+                //gameStartedForPlayer = true;
                 hostLauncher.launch(intent);
                 break;
             case R.id.button_lobby_leave:

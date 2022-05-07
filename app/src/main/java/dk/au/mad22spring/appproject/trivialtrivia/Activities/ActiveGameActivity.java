@@ -53,7 +53,7 @@ public class ActiveGameActivity extends AppCompatActivity {
         progressBarTime = findViewById(R.id.pBar_aGame_time);
         //endregion
 
-        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
+        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ); //this is null for the player
         whoIsCalling = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
         playerReference = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF); //wrong playerObject is sent with this one
 
@@ -106,37 +106,6 @@ public class ActiveGameActivity extends AppCompatActivity {
                 playerReference = playerToGet;
             }
         });
-
-        /*
-        vm.getCurrentQuestion(documentId).observe(this, new Observer<Question>() {
-            @Override
-            public void onChanged(Question question) {
-                if (question == null) {
-                    return;
-                }
-
-                List<String> allQuestions = new ArrayList<>();
-                allQuestions.add(question.getCorrectAnswer());
-                allQuestions.add(question.getIncorrectAnswer1());
-                allQuestions.add(question.getIncorrectAnswer2());
-                allQuestions.add(question.getIncorrectAnswer3());
-
-                correctAnswer = question.getCorrectAnswer();
-
-                Collections.shuffle(allQuestions);
-
-                buttonAnswer1.setText(allQuestions.get(0));
-                buttonAnswer2.setText(allQuestions.get(1));
-                buttonAnswer3.setText(allQuestions.get(2));
-                buttonAnswer4.setText(allQuestions.get(3));
-
-                if (activeGame == null) {
-                    return;
-                }
-            }
-        });
-         */
-        //region virker ikke her
 
 
         vm.getQuestions(documentId).observe(this, new Observer<List<Question>>() {
