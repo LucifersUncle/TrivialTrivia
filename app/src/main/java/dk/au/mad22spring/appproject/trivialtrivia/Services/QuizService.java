@@ -27,6 +27,10 @@ import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
+//****************************************************************************//
+//Inspiration has been drawn from Lecture 5 - Services and Async Processing
+//from the MAD course
+//****************************************************************************//
 public class QuizService extends LifecycleService {
 
     private ExecutorService executorService;

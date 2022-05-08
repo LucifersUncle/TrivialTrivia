@@ -22,6 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.User;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
+//*******************************************************//
+//https://www.youtube.com/watch?v=Z-RE1QuUWPg - PART1
+//https://www.youtube.com/c/CodeWithMazn - PART2
+//...and the rest of the series
+//******************************************************//
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView banner;
     private Button registerUser, buttonBack;
