@@ -22,7 +22,7 @@
     <string name="textLoginHeader">LOGIN</string>
     <string name="textRegister">Register</string>
     <string name="textForgotPassword">Forgot Password?</string>
-    <string name="textAppName">Trivial Trivia</string>
+    <string name="textAppName" translatable="false">Trivial Trivia</string>
     <string name="editTextUsername">Username</string>
     <string name="buttonRegister">Register User</string>
     <string name="textWelcomeHeaderProfile">Welcome</string>
@@ -45,7 +45,7 @@
     <string name="textScoreActiveGame">Score</string>
     <string name="activeQuiz">A new quiz is happening!</string>
     <string name="textCategoryBanner">Category</string>
-    <string name="textTimeLeft">0</string>
+    <string name="textTimeLeft" translatable="false">0</string>
     <string name="textCurrentRound"></string>
     <string name="buttonNextQuestion">Next Question</string>
     <string name="quizUpdateInfo">A %s quiz about %s</string>

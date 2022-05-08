@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TrivialTrivia</string>
+    <string name="btnLogin">Login</string>
+    <string name="txtLogin">LOGIN</string>
+    <string name="btn_startGame">Start Spil</string>
+    <string name="txt_lobby">Lobby</string>
+    <string name="txt_points">Points:</string>
+    <string name="txt_finalsScores">De endelige scorer er</string>
+    <string name="btn_newGame">Nyt Spil</string>
+    <string name="prompt_password">Kode</string>
+    <string name="action_sign_in">Log ind eller registrer</string>
+    <string name="action_sign_in_short">Log ind</string>
+    <string name="welcome">Velkommen !</string>
+    <string name="invalid_username">Ikke et gyldigt brugernavn</string>
+    <string name="invalid_password">Koden skal være længere end 6 bogstaver</string>
+    <string name="login_failed">Login fejlede</string>
+    <string name="buttonLogin">Login</string>
+    <string name="btnSignUp">Registrer</string>
+    <string name="textLoginHeader">LOGIN</string>
+    <string name="textRegister">Registrer</string>
+    <string name="textForgotPassword">Glemt kode?</string>
+    <string name="editTextUsername">Brugernavn</string>
+    <string name="buttonRegister">Registrer Bruger</string>
+    <string name="textWelcomeHeaderProfile">Velkommen</string>
+    <string name="buttonLogOut">Log ud</string>
+    <string name="textUserGreeting">Test</string>
+    <string name="buttonResetPassword">Nulstil kode</string>
+    <string name="buttonCreateGame">Opret</string>
+    <string name="buttonJoinGame">Tilslut</string>
+    <string name="textGameSettingsHeader">Spil Indstillinger</string>
+    <string name="textNumberOfRounds">Runder:</string>
+    <string name="textNumberOfSeconds">Tid i Sekunder:</string>
+    <string name="buttonHostGame">Host spil</string>
+    <string name="txtAvailableGames">Tilgængelige Spil</string>
+    <string name="buttonBack">Tilbage</string>
+    <string name="btn_leave">Forlad</string>
+    <string name="buttonLeaveActiveGave">Forlad</string>
+    <string name="textScoreActiveGame">Score</string>
+    <string name="activeQuiz">Der er en ny quiz!</string>
+    <string name="textCategoryBanner">Kategori</string>
+    <string name="buttonNextQuestion">Næste spørgsmål</string>
+    <string name="quizUpdateInfo">En %s quiz omkring %s</string>
+</resources>
