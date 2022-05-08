@@ -172,6 +172,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btn_lobby_startGame:
                 vm.setStartedState(true, documentId); //host has started the game and therefore state changes
+                vm.setActiveState(false, documentId);
 
                 Intent intent = new Intent(getApplicationContext(), ActiveGameActivity.class);
 
