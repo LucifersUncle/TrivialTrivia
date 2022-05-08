@@ -99,19 +99,6 @@
         tools:text="Answer 3" />
 
 
-    <ProgressBar
-        android:id="@+id/pBar_aGame_time"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginEnd="64dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline37"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toTopOf="@+id/guideline40" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline37"
         android:layout_width="wrap_content"
@@ -180,8 +167,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/txt_aGame_Question"
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toBottomOf="@+id/pBar_aGame_time" />
+        app:layout_constraintTop_toTopOf="@+id/guideline40"
+        app:layout_constraintVertical_bias="0.727" />
 
     <TextView
         android:id="@+id/textTimeLeft"

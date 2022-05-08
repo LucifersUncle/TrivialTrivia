@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,9 +35,8 @@ public class ActiveGameActivity extends AppCompatActivity {
     private String documentId, whoIsCalling, correctAnswer;
 
     private Button buttonAnswer1, buttonAnswer2, buttonAnswer3, buttonAnswer4;
-    private Button buttonLeave, buttonAnswerSelected;
+    private Button buttonLeave, buttonAnswerSelected, buttonNextQuestion;
     private TextView textCurrentRound, textViewAnswerQuestion, textCategoryBanner, textScore, timeLeft;
-    private ProgressBar progressBarTime;
 
     private CountDownTimer countDownTimer;
     private Question question;
@@ -57,13 +57,24 @@ public class ActiveGameActivity extends AppCompatActivity {
         buttonAnswer2 = findViewById(R.id.txt_aGame_answer2);
         buttonAnswer3 = findViewById(R.id.txt_aGame_answer3);
         buttonAnswer4 = findViewById(R.id.txt_aGame_answer4);
+
+        buttonNextQuestion = findViewById(R.id.buttonNextQuestion);
+        buttonNextQuestion.setVisibility(View.GONE);
+        buttonNextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ActiveGameActivity.this, "Next Question", Toast.LENGTH_SHORT).show();
+                isClickable = true;
+                vm.setNextRound(documentId, activeGame.getCurrentRound());
+            }
+        });
+
         isClickable = true;
 
         textViewAnswerQuestion = findViewById(R.id.txt_aGame_Question);
         textCurrentRound = findViewById(R.id.textCurrentRound);
         textCategoryBanner = findViewById(R.id.textCategoryBanner);
         timeLeft = findViewById(R.id.textTimeLeft);
-        progressBarTime = findViewById(R.id.pBar_aGame_time);
         textScore = findViewById(R.id.txt_aGame_scorePoint);
         //endregion
 
@@ -139,6 +150,7 @@ public class ActiveGameActivity extends AppCompatActivity {
                 buttonAnswer2.setText(answerList.get(1));
                 buttonAnswer3.setText(answerList.get(2));
                 buttonAnswer4.setText(answerList.get(3));
+                correctAnswer = answerList.get(3);
                 textViewAnswerQuestion.setText(answerList.get(4));
 
                 /*
@@ -147,16 +159,16 @@ public class ActiveGameActivity extends AppCompatActivity {
                 buttonAnswer3.setText(questions.get(0).getIncorrectAnswer2());
                 buttonAnswer4.setText(questions.get(0).getIncorrectAnswer3());
                 textViewAnswerQuestion.setText(questions.get(0).getQuestion());
-
                  */
                 textCategoryBanner.setText("Category: " + questions.get(0).getCategory());
 
-                //startTimer(activeGame.getTimePerRound());
-                //textCurrentRound.setText(("Current Round: " + Integer.toString(activeGame.getCurrentRound())));
-                //textScore.setText(String.valueOf(playerReference.getScore()));
+                startTimer(activeGame.getTimePerRound());
+                textCurrentRound.setText(("Current Round: " + Integer.toString(activeGame.getCurrentRound())));
+                textScore.setText(String.valueOf(playerReference.getScore()));
             }
         });
 
+        //region Skal nok slettes
 /*
         vm.getCurrentQuestion(documentId).observe(this, new Observer<Question>() {
             @Override
@@ -198,61 +210,72 @@ public class ActiveGameActivity extends AppCompatActivity {
         });
 
  */
-
-
+        //endregion
     }
 
     private void onAnswerPicked(Button button) {
         if (isClickable) {
             switch (button.getId()) {
                 case R.id.txt_aGame_answer1:
-//                    button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.correct_answer));
-                    button.setBackgroundColor(Color.GREEN);
+                    if (buttonAnswer1.getText().equals(correctAnswer)) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+                    }
                     break;
                 case R.id.txt_aGame_answer2:
-                    button.setBackgroundColor(Color.RED);
+                    if (buttonAnswer2.getText().equals(correctAnswer)) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+                    }
                     break;
-                    //button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.wrong_answer));
                 case R.id.txt_aGame_answer3:
-                    button.setBackgroundColor(Color.RED);
+                    if (buttonAnswer3.getText().equals(correctAnswer)) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+                    }
                     break;
-                    //button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.wrong_answer));
                 case R.id.txt_aGame_answer4:
-                    button.setBackgroundColor(Color.RED);
+                    if (buttonAnswer4.getText().equals(correctAnswer)) {
+                        button.setBackgroundColor(Color.GREEN);
+                    } else {
+                        button.setBackgroundColor(Color.RED);
+                    }
                     break;
-                    //button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.wrong_answer));
             }
             buttonAnswerSelected = button;
             isClickable = false;
         }
     }
 
-    private void resetAnswerButtonBackground(View view) {
+    private void resetAnswerButtonBackground(Button view) {
         view.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.question_default_background));
     }
 
 
-    public void optionOne(View view) {
+    public void optionOne(View button) {
         if (isClickable){
-            onAnswerPicked((Button) view);
+            onAnswerPicked((Button) button);
         }
     }
 
-    public void optionTwo(View view) {
+    public void optionTwo(View button) {
         if (isClickable){
-            onAnswerPicked((Button) view);
+            onAnswerPicked((Button) button);
         }
     }
 
-    public void optionThree(View view) {
+    public void optionThree(View button) {
         if (isClickable){
-            onAnswerPicked((Button) view);
+            onAnswerPicked((Button) button);
         }
     }
 
-    public void optionFour(View view) {
+    public void optionFour(View button) {
         if (isClickable){
-            onAnswerPicked((Button) view);
+            onAnswerPicked((Button) button);
         }
     }
 
@@ -308,5 +331,17 @@ public class ActiveGameActivity extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    private void onWrongAnswer() {
+        if (whoIsCalling.equals("host")) {
+            buttonNextQuestion.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void onCorrectAnswer() {
+        if (whoIsCalling.equals("host")) {
+            buttonNextQuestion.setVisibility(View.VISIBLE);
+        }
     }
 }
