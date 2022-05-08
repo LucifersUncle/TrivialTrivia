@@ -48,5 +48,10 @@
     <string name="textTimeLeft">0</string>
     <string name="textCurrentRound">0</string>
     <string name="buttonNextQuestion">Next Question</string>
+    <string name="quizUpdateInfo">A %s quiz about %s</string>
+
+
+
+
 
 </resources>

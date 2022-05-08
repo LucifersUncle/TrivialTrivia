@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 
 import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
+import dk.au.mad22spring.appproject.trivialtrivia.Services.QuizService;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewModel;
 
 
@@ -30,7 +32,7 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
     private Spinner spinnerCategory, spinnerDifficulty;
     private EditText gameName;
 
-    private String difficultySelected="", categorySelected="";
+    private String difficultySelected="", categorySelected="", categoryString="";
 
     private GameSettingsViewModel vm;
     private int roundsPicked, timePickedPerRound;
@@ -83,9 +85,13 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
                 }
 
 
+                startForegroundService(getApplication(), categoryString, difficulty);
+
             }
         });
         //endregion
+
+
 
         //region Category Dropdown menu
         //Set up drop down with ArrayAdapter for Category
@@ -147,12 +153,21 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
 
     }
 
+    //To start foreground service
+    private void startForegroundService(Application application, String category, String difficulty) {
+        Intent foregroundServiceIntent = new Intent(application, QuizService.class);
+        foregroundServiceIntent.putExtra(Constants.CATEGORY_STRING, category);
+        foregroundServiceIntent.putExtra(Constants.DIFFICULTY_OBJ, difficulty);
+        startService(foregroundServiceIntent);
+    }
+
     //region
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()){
             case R.id.dropDownCategory:
                 categorySelected = adapterView.getItemAtPosition(i).toString().toLowerCase();
+                categoryString = categorySelected;
                 if(categorySelected.equals("any category")){
                     categorySelected="";}
                 else if(categorySelected.equals("general knowledge")){

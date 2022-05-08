@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import dk.au.mad22spring.appproject.trivialtrivia.Constants.Constants;
 import dk.au.mad22spring.appproject.trivialtrivia.Database.Database;
 import dk.au.mad22spring.appproject.trivialtrivia.Models.Game;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
@@ -50,6 +51,9 @@ public class QuizService extends LifecycleService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         database = Database.getInstance(getApplication());
+        String category = (String) intent.getSerializableExtra(Constants.CATEGORY_STRING);
+        String difficulty = (String) intent.getSerializableExtra(Constants.DIFFICULTY_OBJ);
+
         //check for Android version - whether we need to create a notification channel (from Android 0 and up, API 26)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL, "Foreground Service", NotificationManager.IMPORTANCE_LOW);
@@ -76,7 +80,7 @@ public class QuizService extends LifecycleService {
                     else{
                         notification = notificationBuilder
                                 .setContentTitle(getResources().getString(R.string.activeQuiz))
-                                .setContentText(" ")
+                                .setContentText(String.format(getResources().getString(R.string.quizUpdateInfo), difficulty, category))
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                                 .build();
                     }

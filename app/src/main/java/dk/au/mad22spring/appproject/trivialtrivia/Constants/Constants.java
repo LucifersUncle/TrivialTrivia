@@ -5,6 +5,7 @@ public class Constants {
     public static final String GAME_OBJ = "GAME_OBJ"; //what game is it
     public static final String DOC_OBJ = "DOC_OBJ"; //what document is it
     public static final String CATEGORY_OBJ = "CATEGORY_OBJ";
+    public static final String CATEGORY_STRING = "CATEGORY_STRING";
     public static final String DIFFICULTY_OBJ = "DIFFICULTY_OBJ";
     public static final String PLAYER_REF = "PLAYER_REF";
     public static final String PLAYER_NAME = "PLAYER_NAME";
