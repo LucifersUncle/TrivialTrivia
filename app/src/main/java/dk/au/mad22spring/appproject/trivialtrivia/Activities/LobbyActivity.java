@@ -26,6 +26,11 @@ import dk.au.mad22spring.appproject.trivialtrivia.Models.Player;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.LobbyViewModel;
 
+//******************************************************//
+//https://www.youtube.com/watch?v=nj-trslVFPc&t=2128s
+//The logic of state management between users, has drawn inspiration from above video
+//and an ungodly amount of debugging
+//******************************************************//
 public class LobbyActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String playerObj;
@@ -73,7 +78,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         playerObj = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
 
         playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
-        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ); //here it gets set to documentId as expected
+        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
         playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
 
         //region Buttons

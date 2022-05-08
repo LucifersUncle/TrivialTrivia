@@ -28,7 +28,12 @@ import com.google.firebase.auth.FirebaseUser;
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 import dk.au.mad22spring.appproject.trivialtrivia.Services.QuizService;
 
+//*******************************************************//
 //https://firebase.google.com/docs/auth/android/start
+//https://www.youtube.com/watch?v=Z-RE1QuUWPg - PART1
+//https://www.youtube.com/c/CodeWithMazn - PART2
+//...and the rest of the series
+//******************************************************//
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView register, forgotPassword;

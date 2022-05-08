@@ -39,14 +39,14 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.JoinGameViewModel;
 
 public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapter.IJoinGameItemClickedListener {
 
-    //widgets
+    //region Widgets
     private Button buttonBack;
     private RecyclerView rcvList;
     private JoinGameAdapter adapter;
+    //endregion
 
     private JoinGameViewModel vm;
     private List<Game> lobbies;
-    private ArrayList<User> users;
 
     private String playerName;
     private String playerRef; //recently added for test purposed
