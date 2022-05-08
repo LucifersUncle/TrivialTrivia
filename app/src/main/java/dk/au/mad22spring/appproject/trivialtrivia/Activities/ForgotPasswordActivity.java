@@ -17,11 +17,19 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import dk.au.mad22spring.appproject.trivialtrivia.R;
 
+
+//*******************************************************//
+//https://www.youtube.com/watch?v=Z-RE1QuUWPg - PART1
+//https://www.youtube.com/c/CodeWithMazn - PART2
+//...and the rest of the series
+//******************************************************//
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    //region Widgets
     private EditText editTextEmailAddress;
     private Button buttonResetPassword;
     private ProgressBar progressBar;
+    //endregion
 
     FirebaseAuth mAuth;
 
@@ -30,8 +38,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
+        //region Find the UI elements
         editTextEmailAddress = (EditText) findViewById(R.id.editTextEmailAddressRetrieval);
         progressBar = (ProgressBar) findViewById(R.id.progressBarForgotPassword);
+        //endregion
 
         //region Buttons
         buttonResetPassword = (Button) findViewById(R.id.buttonResetPassword);
@@ -44,7 +54,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         //endregion
 
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     private void resetPassword() {

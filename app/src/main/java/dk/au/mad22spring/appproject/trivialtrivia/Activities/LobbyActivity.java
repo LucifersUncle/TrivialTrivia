@@ -70,8 +70,6 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
         });
 
         // Get data from the other activity
-
-        //String game = (String) getIntent().getSerializableExtra(Constants.GAME_OBJ);
         playerObj = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
 
         playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);

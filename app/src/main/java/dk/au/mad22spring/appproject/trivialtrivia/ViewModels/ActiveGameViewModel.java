@@ -34,20 +34,24 @@ public class ActiveGameViewModel extends AndroidViewModel {
         return db.getCurrentQuestion(documentId);
     }
 
-    public LiveData<Boolean> getActiveState(String documentID) {
-        return db.getActiveState(documentID);
+    public LiveData<Boolean> getActiveState(String documentId) {
+        return db.getActiveState(documentId);
     }
 
-    public LiveData<List<Player>> getPlayers(String documentID) {
-        return db.getPlayersInGame(documentID);
+    public LiveData<List<Player>> getPlayers(String documentId) {
+        return db.getPlayersInGame(documentId);
     }
 
-    public LiveData<Player> getPlayer(String documentID, String playerReference) {
-        return db.getPlayer(documentID, playerReference);
+    public LiveData<Player> getPlayer(String documentId, String playerReference) {
+        return db.getPlayer(documentId, playerReference);
     }
 
     public void setScore(String documentId, String playerReference, int score) {
         db.setPlayerScore(documentId, playerReference, score);
+    }
+
+    public LiveData<Integer> getCurrentRound(String documentId) {
+        return db.getCurrentRound(documentId);
     }
 
     public void setNextRound(String documentId, int currentRound) {

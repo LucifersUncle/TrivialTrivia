@@ -46,7 +46,7 @@
     <string name="activeQuiz">A new quiz is happening!</string>
     <string name="textCategoryBanner">Category</string>
     <string name="textTimeLeft">0</string>
-    <string name="textCurrentRound">0</string>
+    <string name="textCurrentRound"></string>
     <string name="buttonNextQuestion">Next Question</string>
     <string name="quizUpdateInfo">A %s quiz about %s</string>
 

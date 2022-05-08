@@ -1,7 +1,6 @@
 package dk.au.mad22spring.appproject.trivialtrivia.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,12 +12,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,19 +31,23 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.ActiveGameViewModel
 
 public class ActiveGameActivity extends AppCompatActivity {
 
-    private String documentId, whoIsCalling, correctAnswer;
+    //region Global Variables
+    private String documentId, playerObj, correctAnswer;
+    private boolean isClickable;
+    //endregion
 
+    //region Widgets
     private Button buttonAnswer1, buttonAnswer2, buttonAnswer3, buttonAnswer4;
     private Button buttonLeave, buttonAnswerSelected, buttonNextQuestion;
     private TextView textCurrentRound, textViewAnswerQuestion, textCategoryBanner, textScore, timeLeft;
-
     private CountDownTimer countDownTimer;
-    private Question question;
+    //endregion
+
+
     private ActiveGameViewModel vm;
     private Player playerReference;
-    private ActiveGame activeGame;
     private List<Player> playerList;
-    private boolean isClickable;
+    private ActiveGame activeGame;
     private ExecutorService executorService;
 
     @Override
@@ -52,38 +55,29 @@ public class ActiveGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_game);
 
-        //region widget setup
+        //region Buttons
+
+        //region Buttons handling the answers
         buttonAnswer1 = findViewById(R.id.txt_aGame_answer1);
         buttonAnswer2 = findViewById(R.id.txt_aGame_answer2);
         buttonAnswer3 = findViewById(R.id.txt_aGame_answer3);
         buttonAnswer4 = findViewById(R.id.txt_aGame_answer4);
+        //endregion
 
+        //region Button for moving to the next question
         buttonNextQuestion = findViewById(R.id.buttonNextQuestion);
         buttonNextQuestion.setVisibility(View.GONE);
         buttonNextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActiveGameActivity.this, "Next Question", Toast.LENGTH_SHORT).show();
                 isClickable = true;
+                Toast.makeText(ActiveGameActivity.this, "Go To Next Round", Toast.LENGTH_SHORT).show();
                 vm.setNextRound(documentId, activeGame.getCurrentRound());
             }
         });
-
-        isClickable = true;
-
-        textViewAnswerQuestion = findViewById(R.id.txt_aGame_Question);
-        textCurrentRound = findViewById(R.id.textCurrentRound);
-        textCategoryBanner = findViewById(R.id.textCategoryBanner);
-        timeLeft = findViewById(R.id.textTimeLeft);
-        textScore = findViewById(R.id.txt_aGame_scorePoint);
         //endregion
 
-        executorService = Executors.newSingleThreadExecutor();
-
-        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ); //this is null for the player
-        whoIsCalling = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
-        playerReference = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF); //wrong playerObject is sent with this one
-
+        //region Leave Button
         buttonLeave = findViewById(R.id.buttonLeaveActiveGame);
         buttonLeave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +85,31 @@ public class ActiveGameActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //endregion
 
+        //Button state
+        isClickable = true;
+
+        //endregion
+
+        //region TextViews
+        textViewAnswerQuestion = findViewById(R.id.txt_aGame_Question);
+        textCurrentRound = findViewById(R.id.textCurrentRound);
+        textCategoryBanner = findViewById(R.id.textCategoryBanner);
+        timeLeft = findViewById(R.id.textTimeLeft);
+        textScore = findViewById(R.id.txt_aGame_scorePoint);
+        //endregion
+
+        //Executor Service used in connection with the time, to deploy a new Thread to handle logic - currently not doing much if anything
+        executorService = Executors.newSingleThreadExecutor();
+
+        //region Receive Data from previous activity using Intents
+        documentId = (String) getIntent().getSerializableExtra(Constants.DOC_OBJ);
+        playerObj = (String) getIntent().getSerializableExtra(Constants.PLAYER_OBJ);
+        playerReference = (Player) getIntent().getSerializableExtra(Constants.PLAYER_REF);
+        //endregion
+
+        //region ViewModels being Set Up and Observed Upon - Looking at the RealTimeDatabase and Data Changes
         vm = new ViewModelProvider(this).get(ActiveGameViewModel.class);
 
         vm.getActiveGame(documentId).observe(this, new Observer<ActiveGame>() {
@@ -115,7 +133,7 @@ public class ActiveGameActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean active) {
                 if (!active) {
-                    if (whoIsCalling.equals("player")) {
+                    if (playerObj.equals("player")) {
                         Intent intent = new Intent();
                         setResult(RESULT_CANCELED, intent);
                         finish();
@@ -131,85 +149,47 @@ public class ActiveGameActivity extends AppCompatActivity {
                     return;
                 }
                 playerReference = playerToGet;
+                textScore.setText(String.valueOf(playerReference.getScore()));
             }
         });
 
         vm.getQuestions(documentId).observe(this, new Observer<List<Question>>() {
             @Override
             public void onChanged(List<Question> questions) {
-                List<String> answerList = new ArrayList<>();
+                List<Question> answerList = new ArrayList<>(); //size 10 at 2 questions
                 for (Question q : questions) {
-                    answerList.add(q.getIncorrectAnswer1());
-                    answerList.add(q.getIncorrectAnswer2());
-                    answerList.add(q.getIncorrectAnswer3());
-                    answerList.add(q.getCorrectAnswer());
-                    answerList.add(q.getQuestion());
+                    answerList.add(q);
                 }
 
-                buttonAnswer1.setText(answerList.get(0));
-                buttonAnswer2.setText(answerList.get(1));
-                buttonAnswer3.setText(answerList.get(2));
-                buttonAnswer4.setText(answerList.get(3));
-                correctAnswer = answerList.get(3);
-                textViewAnswerQuestion.setText(answerList.get(4));
+                Question currentQuestion = answerList.get(activeGame.getCurrentRound());
+                List<String> randomQuestion = new ArrayList<>();
+                randomQuestion.add(currentQuestion.getIncorrectAnswer1());
+                randomQuestion.add(currentQuestion.getIncorrectAnswer2());
+                randomQuestion.add(currentQuestion.getIncorrectAnswer3());
+                randomQuestion.add(currentQuestion.getCorrectAnswer());
 
-                /*
-                buttonAnswer1.setText(questions.get(0).getCorrectAnswer());
-                buttonAnswer2.setText(questions.get(0).getIncorrectAnswer1());
-                buttonAnswer3.setText(questions.get(0).getIncorrectAnswer2());
-                buttonAnswer4.setText(questions.get(0).getIncorrectAnswer3());
-                textViewAnswerQuestion.setText(questions.get(0).getQuestion());
-                 */
+                Collections.shuffle(randomQuestion);
+
+
+                    buttonAnswer1.setText(randomQuestion.get(0));
+                    buttonAnswer2.setText(randomQuestion.get(1));
+                    buttonAnswer3.setText(randomQuestion.get(2));
+                    buttonAnswer4.setText(randomQuestion.get(3));
+                    correctAnswer = currentQuestion.getCorrectAnswer();
+                    textViewAnswerQuestion.setText(currentQuestion.getQuestion());
+
+
                 textCategoryBanner.setText("Category: " + questions.get(0).getCategory());
 
-                startTimer(activeGame.getTimePerRound());
-                textCurrentRound.setText(("Current Round: " + Integer.toString(activeGame.getCurrentRound())));
-                textScore.setText(String.valueOf(playerReference.getScore()));
-            }
-        });
-
-        //region Skal nok slettes
-/*
-        vm.getCurrentQuestion(documentId).observe(this, new Observer<Question>() {
-            @Override
-            public void onChanged(Question question) {
-
-                if (question == null ) {
+                if (activeGame == null) {
                     return;
                 }
 
-                if (question.getCategory().equals(""))
-                    return;
-
-                textCategoryBanner.setText("Category:" + question.getCategory());
-
-                List<String> answerList = new ArrayList<>();
-                answerList.add(question.getIncorrectAnswer1());
-                answerList.add(question.getIncorrectAnswer2());
-                answerList.add(question.getIncorrectAnswer3());
-                answerList.add(question.getCorrectAnswer());
-
-                correctAnswer = question.getCorrectAnswer();
-
-                Collections.shuffle(answerList);
-
-                buttonAnswer1.setText(answerList.get(0));
-                buttonAnswer2.setText(answerList.get(1));
-                buttonAnswer3.setText(answerList.get(2));
-                buttonAnswer4.setText(answerList.get(3));
-
-
-                if (activeGame == null)
-                    return;
-
                 startTimer(activeGame.getTimePerRound());
-                textCurrentRound.setText(String.valueOf(activeGame.getCurrentRound()));
+                textCurrentRound.setText(("Current Round: " + activeGame.getCurrentRound()));
                 textScore.setText(String.valueOf(playerReference.getScore()));
-
             }
         });
-
- */
         //endregion
     }
 
@@ -250,11 +230,11 @@ public class ActiveGameActivity extends AppCompatActivity {
         }
     }
 
-    private void resetAnswerButtonBackground(Button view) {
-        view.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.question_default_background));
+    private void resetAnswerButtonBackground(Button view, int index) {
+        view.setBackgroundColor(Color.parseColor("orange"));
     }
 
-
+    //region Question Options and Interaction with the UI
     public void optionOne(View button) {
         if (isClickable){
             onAnswerPicked((Button) button);
@@ -279,6 +259,28 @@ public class ActiveGameActivity extends AppCompatActivity {
         }
     }
 
+    private void onWrongAnswer() {
+        if (playerObj.equals("host")) {
+            buttonNextQuestion.setVisibility(View.VISIBLE);
+        } else {
+            buttonNextQuestion.setVisibility(View.GONE);
+        }
+    }
+
+    private void onCorrectAnswer() {
+        vm.setScore(documentId, playerReference.getPlayerRef(), playerReference.getScore());
+        if (playerObj.equals("host")) {
+            buttonNextQuestion.setVisibility(View.VISIBLE);
+        } else {
+            buttonNextQuestion.setVisibility(View.GONE);
+        }
+    }
+    //endregion
+
+    //region Timer Logic - Currently not working quite as intended
+    //***************************************************************//
+    //https://developer.android.com/reference/android/os/CountDownTimer
+    //***************************************************************//
     private void startTimer(int timePerRound) {
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -292,11 +294,19 @@ public class ActiveGameActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                //on timer expiry
                 timeLeft.setText("Time Out!");
+                /*
+                if (playerReference.equals("host")){
+                    buttonNextQuestion.setVisibility(View.VISIBLE);
+                }
+                 */
 
+                //if last round is reached and if the player chose the right answer, then set the score using the ViewModel object
                 if (activeGame.getNumberOfRounds() == activeGame.getCurrentRound()) {
                     if (buttonAnswerSelected != null && correctAnswer == buttonAnswerSelected.getText().toString())
                             vm.setScore(documentId, playerReference.getPlayerRef(), playerReference.getScore());
+
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -308,23 +318,24 @@ public class ActiveGameActivity extends AppCompatActivity {
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //display winner dialog
-                                    //needs to be implemented in the result stage!
+                                    Toast.makeText(ActiveGameActivity.this, "SOMEONE WON!", Toast.LENGTH_SHORT).show();
+                                    //launch the result intent
                                 }
                             });
                         }
                     });
                 } else {
+                    //handles the right and wrong answer logic, not debugged thoroughly
                     if (isClickable) {
-                        //display wrong answer
+                        onWrongAnswer();
                     } else if (buttonAnswerSelected != null) {
                         if (correctAnswer == buttonAnswerSelected.getText().toString()) {
-                            //display correct answer
-                            resetAnswerButtonBackground(buttonAnswerSelected);
+                            onCorrectAnswer();
+                            resetAnswerButtonBackground(buttonAnswerSelected, buttonAnswerSelected.getId());
                             isClickable = true;
                         } else {
-                            //display wrong answer
-                            resetAnswerButtonBackground(buttonAnswerSelected);
+                            onWrongAnswer();
+                            resetAnswerButtonBackground(buttonAnswerSelected, buttonAnswerSelected.getId());
                             isClickable = true;
                         }
                     }
@@ -332,16 +343,19 @@ public class ActiveGameActivity extends AppCompatActivity {
             }
         }.start();
     }
+    //endregion
 
-    private void onWrongAnswer() {
-        if (whoIsCalling.equals("host")) {
-            buttonNextQuestion.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void onCorrectAnswer() {
-        if (whoIsCalling.equals("host")) {
-            buttonNextQuestion.setVisibility(View.VISIBLE);
-        }
+    //****************************//
+    //https://stackoverflow.com/questions/20950066/how-implement-comparator-in-to-sort-objects-in-android-or-java
+    //
+    // Not Used, but kept for possible future development
+    //***************************//
+    private void sortPlayersByScore() {
+        Collections.sort(playerList, new Comparator<Player>() {
+            @Override
+            public int compare(Player player1, Player player2) {
+                return player1.getScore() - player2.getScore();
+            }
+        });
     }
 }

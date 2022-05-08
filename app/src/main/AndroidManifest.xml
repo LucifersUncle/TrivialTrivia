@@ -46,9 +46,7 @@
         <activity
             android:name=".Activities.LobbyActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activities.InviteActivity"
-            android:exported="false" />
+
         <service
             android:name=".Services.QuizService"
             android:enabled="true"

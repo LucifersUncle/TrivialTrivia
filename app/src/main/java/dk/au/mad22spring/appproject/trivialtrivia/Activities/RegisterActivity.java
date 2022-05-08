@@ -24,7 +24,7 @@ import dk.au.mad22spring.appproject.trivialtrivia.R;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView banner;
-    private Button registerUser;
+    private Button registerUser, buttonBack;
     private EditText editTextUsername, editTextEmail, editTextPassword;
     private ProgressBar progressBar;
 
@@ -46,6 +46,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //region Buttons
         registerUser = (Button) findViewById(R.id.buttonRegister);
         registerUser.setOnClickListener(this);
+
+        buttonBack = (Button) findViewById(R.id.button_register_back);
+        buttonBack.setOnClickListener(this);
         //endregion
 
         //region EditTexts
@@ -70,6 +73,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.buttonRegister:
                 registerUser();
                 break;
+            case R.id.button_register_back:
+                finish();
         }
     }
 

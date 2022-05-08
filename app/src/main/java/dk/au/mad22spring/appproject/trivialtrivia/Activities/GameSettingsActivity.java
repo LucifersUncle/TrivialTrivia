@@ -27,8 +27,14 @@ import dk.au.mad22spring.appproject.trivialtrivia.ViewModels.GameSettingsViewMod
 
 public class GameSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    //**************************************************************//
+    //https://medium.com/@sc71/android-numberpickers-3ef535c45487
+    //**************************************************************//
     private NumberPicker roundsPicker, timePicker;
     private Button buttonHostGame, buttonsSettingsBack;
+    //************************************************************//
+    //https://developer.android.com/guide/topics/ui/controls/spinner
+    //*************************************************************//
     private Spinner spinnerCategory, spinnerDifficulty;
     private EditText gameName;
 
@@ -45,7 +51,6 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
         String playerName = (String) getIntent().getSerializableExtra(Constants.PLAYER_NAME);
 
         vm = new ViewModelProvider(this).get(GameSettingsViewModel.class);
-
 
         //region Buttons
         buttonsSettingsBack = (Button) findViewById(R.id.button_setting_back);
@@ -90,8 +95,6 @@ public class GameSettingsActivity extends AppCompatActivity implements AdapterVi
             }
         });
         //endregion
-
-
 
         //region Category Dropdown menu
         //Set up drop down with ArrayAdapter for Category

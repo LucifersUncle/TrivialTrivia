@@ -38,7 +38,7 @@ public class Database {
     private DatabaseReference mDatabase;
 
     private MutableLiveData<List<Game>> gamesList;
-    private  MutableLiveData<List<Game>> activeGamesList;
+    private MutableLiveData<List<Game>> activeGamesList;
     private MutableLiveData<List<Player>> playerList;
     private MutableLiveData<List<Question>> questionList;
 
@@ -449,7 +449,7 @@ public class Database {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies")
                 .child(documentId)
-                .child("round");
+                .child("currentRound");
         mDatabase.setValue(currentRound + 1);
     }
 
@@ -459,7 +459,8 @@ public class Database {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies")
                 .child(documentId)
-                .child("round");
+                .child("currentRound");
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -507,7 +508,7 @@ public class Database {
         return activeGameObj;
     }
 
-    //START HERE!!!!
+
     public LiveData<List<Player>> getPlayersInGame(String documentId) {
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies")
