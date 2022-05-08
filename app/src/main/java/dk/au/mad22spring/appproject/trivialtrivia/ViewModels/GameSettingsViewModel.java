@@ -21,7 +21,7 @@ public class GameSettingsViewModel extends AndroidViewModel {
     }
 
     public void fetchQuestions(String documentName, int roundsPicked, String category, String difficulty){
-        db.fetchQuestionsFromAPI(documentName, roundsPicked, category, difficulty);
+        db.getQuestionsFromDb(documentName, roundsPicked, category, difficulty);
     }
 
 

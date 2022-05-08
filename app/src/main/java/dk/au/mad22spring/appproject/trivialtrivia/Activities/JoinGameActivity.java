@@ -55,7 +55,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
     private DatabaseReference reference;
     private String userID;
 
-    private Player playerObj = new Player();
+    private Player playerObj;
     ActivityResultLauncher<Intent> launcher;
 
     @Override
@@ -73,6 +73,7 @@ public class JoinGameActivity extends AppCompatActivity implements JoinGameAdapt
         
 
         playerRef = (String) getIntent().getSerializableExtra(Constants.PLAYER_REF);
+        playerObj = new Player();
 
         // Get User Data from DB
         user = FirebaseAuth.getInstance().getCurrentUser();

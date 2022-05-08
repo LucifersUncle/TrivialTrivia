@@ -105,13 +105,12 @@ public class Database {
                     String gameName = lobby.child("gameName").getValue().toString();
                     String category = lobby.child("category").getValue().toString();
                     String difficulty = lobby.child("difficulty").getValue().toString();
-                    //int numberOfRounds = Integer.parseInt(lobby.child("numberOfRounds").getValue().toString()); //should be added
-                    //int timePerRound = Integer.parseInt(lobby.child("timePerRound").getValue().toString()); //should be added
+                    int numberOfRounds = Integer.parseInt(lobby.child("numberOfRounds").getValue().toString()); //should be added
+                    int timePerRound = Integer.parseInt(lobby.child("timePerRound").getValue().toString()); //should be added
 
-                    Game game = new Game(gameName, 10, 10, "Tests", documentName, true, false, category, difficulty);
+                    Game game = new Game(gameName, timePerRound, numberOfRounds, "<HostName>", documentName, true, false, category, difficulty);
                     lobbiesList.add(game);
                 }
-
                 gamesList.setValue(lobbiesList);
             }
 
@@ -256,7 +255,7 @@ public class Database {
     //endregion
 
     //region Questions
-    public void fetchQuestionsFromAPI(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
+    public void getQuestionsFromDb(String documentId, int roundsPicked, String categoryPicked, String difficultyPicked){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentId);
 
@@ -316,21 +315,19 @@ public class Database {
                 .getReference("Lobbies").child(documentId).child("questions");
 
         for(Result r: results){
-            String category = r.getCategory();
-            String difficulty = r.getDifficulty();
+            String category = r.getCategory(); //maybe show these in view
+            String difficulty = r.getDifficulty(); //maybe show these in view
             String question = r.getQuestion();
             String correctAnswer = r.getCorrectAnswer();
             List<String> incorrectAnswer = r.getIncorrectAnswers();
 
             String questionKey = mDatabase.push().getKey();
-            Question addedQuestion = new Question(questionKey, correctAnswer, incorrectAnswer.get(0), incorrectAnswer.get(1), incorrectAnswer.get(2), question);
+            Question addedQuestion = new Question(questionKey, correctAnswer, incorrectAnswer.get(0), incorrectAnswer.get(1), incorrectAnswer.get(2), question, category, difficulty);
             mDatabase.child(questionKey).setValue(addedQuestion);
         }
     }
 
-
-
-    public LiveData<List<Question>> fetchQuestionsFromAPI(String documentName){
+    public LiveData<List<Question>> getQuestionsFromDb(String documentName){
         mDatabase = FirebaseDatabase.getInstance("https://trivialtrivia-group20-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Lobbies").child(documentName).child("questions");
 
@@ -353,8 +350,10 @@ public class Database {
                         String incorrectAnswer2 = q.child("incorrectAnswer2").getValue().toString();
                         String incorrectAnswer3 = q.child("incorrectAnswer3").getValue().toString();
                         String question = q.child("question").getValue().toString();
+                        String category = q.child("category").getValue().toString();
+                        String difficulty = q.child("difficulty").getValue().toString();
 
-                        Question questionAsked = new Question(questionId, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
+                        Question questionAsked = new Question(questionId, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question, category, difficulty);
                         questions.add(questionAsked);
 
                     } catch (Exception e) {
@@ -371,17 +370,6 @@ public class Database {
         return questionList;
     }
     //endregion
-    //endregion
-
-
-
-
-
-
-
-
-
-
 
     //region State Management
     public void setActiveState(boolean state, String documentId) {
@@ -445,18 +433,6 @@ public class Database {
     }
 
     //endregion
-
-
-
-
-
-
-
-
-
-
-
-
 
     //region Active Game Player Attributes
     public void setPlayerScore(String documentId, String playerReference, int currentScore) {
@@ -619,8 +595,10 @@ public class Database {
                 String incorrectAnswer2 = snapshot.child("incorrectAnswer2").getValue().toString();
                 String incorrectAnswer3 = snapshot.child("incorrectAnswer3").getValue().toString();
                 String question = snapshot.child("question").getValue().toString();
+                String category = snapshot.child("category").getValue().toString();
+                String difficulty = snapshot.child("difficulty").getValue().toString();
 
-                Question currentQuestion = new Question(questionId, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question);
+                Question currentQuestion = new Question(questionId, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3, question, category, difficulty);
                 questionObj.setValue(currentQuestion);
             }
 

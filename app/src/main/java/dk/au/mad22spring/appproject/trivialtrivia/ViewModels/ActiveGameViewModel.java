@@ -27,7 +27,7 @@ public class ActiveGameViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Question>> getQuestions(String documentId){
-        return db.fetchQuestionsFromAPI(documentId);
+        return db.getQuestionsFromDb(documentId);
     }
 
     public LiveData<Question> getCurrentQuestion(String documentId) {
@@ -44,6 +44,14 @@ public class ActiveGameViewModel extends AndroidViewModel {
 
     public LiveData<Player> getPlayer(String documentID, String playerReference) {
         return db.getPlayer(documentID, playerReference);
+    }
+
+    public void setScore(String documentId, String playerReference, int score) {
+        db.setPlayerScore(documentId, playerReference, score);
+    }
+
+    public void setNextRound(String documentId, int currentRound) {
+        db.setNextRound(documentId, currentRound);
     }
 
 

@@ -21,13 +21,17 @@ public class Question {
                     String incorrectAnswer1,
                     String incorrectAnswer2,
                     String incorrectAnswer3,
-                    String question){
+                    String question,
+                    String category,
+                    String difficulty){
         this.questionID = questionID;
         this.correctAnswer = correctAnswer;
         this.incorrectAnswer1 = incorrectAnswer1;
         this.incorrectAnswer2 = incorrectAnswer2;
         this.incorrectAnswer3 = incorrectAnswer3;
         this.question = question;
+        this.category = category;
+        this.difficulty = difficulty;
     }
 
     public String getQuestionID() {

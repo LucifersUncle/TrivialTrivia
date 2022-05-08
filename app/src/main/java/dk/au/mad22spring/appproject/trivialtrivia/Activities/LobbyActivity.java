@@ -109,7 +109,7 @@ public class LobbyActivity extends AppCompatActivity implements View.OnClickList
                 if (!active) {
                     if (playerObj.equals("player"))
                         Toast.makeText(LobbyActivity.this, "Error in getting activeState", Toast.LENGTH_SHORT).show();
-                        //finish(); //may not be needed
+                        finish(); //may not be needed
                 }
             }
         });

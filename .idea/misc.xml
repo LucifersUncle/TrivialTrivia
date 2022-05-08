@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/border.xml" value="0.4715" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/correct_answer.xml" value="0.156" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/option1.xml" value="0.156" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/question_default_background.xml" value="0.156" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/drawable/wrong_answer.xml" value="0.156" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.569140625" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout-w936dp/activity_login.xml" value="0.4125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/TrivialTrivia/app/src/main/res/layout/activity_active_game.xml" value="0.4395833333333333" />

@@ -44,8 +44,9 @@
     <string name="buttonLeaveActiveGave">Leave</string>
     <string name="textScoreActiveGame">Score</string>
     <string name="activeQuiz">A new quiz is happening!</string>
-
-
-
+    <string name="textCategoryBanner">Category</string>
+    <string name="textTimeLeft">0</string>
+    <string name="textCurrentRound">0</string>
+    <string name="buttonNextQuestion">Next Question</string>
 
 </resources>
