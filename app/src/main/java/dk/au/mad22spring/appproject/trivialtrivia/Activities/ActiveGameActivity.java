@@ -296,11 +296,11 @@ public class ActiveGameActivity extends AppCompatActivity {
             public void onFinish() {
                 //on timer expiry
                 timeLeft.setText("Time Out!");
-                /*
+
                 if (playerReference.equals("host")){
                     buttonNextQuestion.setVisibility(View.VISIBLE);
                 }
-                 */
+
 
                 //if last round is reached and if the player chose the right answer, then set the score using the ViewModel object
                 if (activeGame.getNumberOfRounds() == activeGame.getCurrentRound()) {
